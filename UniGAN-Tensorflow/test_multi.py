@@ -15,10 +15,9 @@ import module
 # =                                   param                                    =
 # ==============================================================================
 
-py.arg('--img_dir', default='./data/img_celeba/aligned/align_size(572,572)_move(0.250,0.000)_face_factor(0.450)_jpg/data')
-py.arg('--test_label_path', default='./data/img_celeba/test_label.txt')
-py.arg('--test_att_names', choices=data.ATT_ID.keys(), nargs='+', default=['Bangs', 'Mustache'])
-py.arg('--test_ints', type=float, nargs='+', default=2)
+py.arg('--img_dir', default='./data/zappos_50k/images')
+py.arg('--test_label_path', default='./data/zappos_50k/test_label.txt')
+py.arg('--test_att_names', choices=data.ATT_ID.keys(), nargs='+', default=['Men', 'Women'])
 
 py.arg('--experiment_name', default='default')
 args_ = py.args()
