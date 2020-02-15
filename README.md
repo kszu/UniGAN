@@ -1,3 +1,14 @@
+# Flask app setup
+
+1. Git fetch the latest version of this repository to bring down the up-to-date Flask app (found in the `server` directory
+2. From the command line, cd into the `server` directory
+3. If you haven't already installed the Python library `virtualenv`, run `pip install virtualenv`
+4. Run the command `python3.7 -m venv env` to initiate your environment
+5. Run the command `source env/bin/activate` to activate your virtual environment
+6. From within your virtual environment, run the command `python app.py`. This should open up the Flask app at `localhost:5000`
+
+# AttGAN walkthrough
+
 ***New***
 
 - We clean up the code to make it more readable! The old version is here: [v1](https://github.com/LynnHo/AttGAN-Tensorflow/tree/v1).
