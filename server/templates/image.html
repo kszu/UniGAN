@@ -1,0 +1,24 @@
+<html> 
+
+<head>
+<title>UniGAN</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+
+    <h1>Functioning image submission / transformation / return</h1>
+
+    <form action="/image" method="POST" enctype="multipart/form-data">
+        <input type="file" name="image" value="Upload">
+        <input type="submit" value="Transform image to grayscale">
+        <p>Submission input:</p>
+          <img src= "{{ input }}">
+        <p>Submission output:</p>
+          <img src= "{{ output }}">
+    </form>
+
+</body>
+
+</html>
