@@ -15,9 +15,9 @@ import module
 # =                                   param                                    =
 # ==============================================================================
 
-py.arg('--img_dir', default='./data/img_celeba/aligned/align_size(572,572)_move(0.250,0.000)_face_factor(0.450)_jpg/data')
-py.arg('--test_label_path', default='./data/img_celeba/test_label.txt')
-py.arg('--test_att_name', choices=data.ATT_ID.keys(), default='Pale_Skin')
+py.arg('--img_dir', default='./data/zappos_50k/images')
+py.arg('--test_label_path', default='./data/zappos_50k/test_label.txt')
+py.arg('--test_att_name', choices=data.ATT_ID.keys(), default='Women')
 py.arg('--test_int_min', type=float, default=-2)
 py.arg('--test_int_max', type=float, default=2)
 py.arg('--test_int_step', type=float, default=0.5)
