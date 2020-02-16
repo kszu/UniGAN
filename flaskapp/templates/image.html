@@ -11,8 +11,12 @@
     <h1>Functioning image submission / transformation / return</h1>
 
     <form action="/image" method="POST" enctype="multipart/form-data">
+        <select name="transform_option">
+          <option value="RGB">RGB to Grayscale</option>
+          <option value="Rotate">Rotate 90 degrees</option>        
+        </select>
         <input type="file" name="image" value="Upload">
-        <input type="submit" value="Transform image to grayscale">
+        <input type="submit" value="Transform image">
         <p>Submission input:</p>
           <img src= "{{ input }}">
         <p>Submission output:</p>

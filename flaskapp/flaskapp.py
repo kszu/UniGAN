@@ -75,23 +75,29 @@ def image_transformation():
 
     if request.method == "POST":
         file = request.files["image"]
-
+        transform_option = request.form.get("transform_option")
+        
         if file and allowed_file(file.filename):
             # save original to directory
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.root_path, app.config["UPLOAD_FOLDER"], filename))
 
-            # read image and transform to grayscale
-            im = io.imread(file, plugin="matplotlib")
-            gray = Image.fromarray(im).convert("L")
+            if transform_option == "RGB":
+                # read image and transform to grayscale
+                im = io.imread(file, plugin="matplotlib")
+                im_mod = Image.fromarray(im).convert("L")
+                im_mod_filename = "im_mod_rgb_" + filename
+            elif transform_option == "Rotate":
+                # read image and rotate
+                im = io.imread(file, plugin="matplotlib")
+                im_mod = Image.fromarray(im).rotate(90)
+                im_mod_filename = "im_mod_rotate_" + filename
 
-            # save grayscale
-            gray_filename = "gray" + filename
-            gray.save(os.path.join(app.root_path, app.config["UPLOAD_FOLDER"], gray_filename))
+            im_mod.save(os.path.join(app.root_path, app.config["UPLOAD_FOLDER"], im_mod_filename))
 
             # define input image and output image prior to returning on webpage
             input = os.path.join(app.config["UPLOAD_FOLDER"], filename)
-            output = os.path.join(app.config["UPLOAD_FOLDER"], gray_filename)
+            output = os.path.join(app.config["UPLOAD_FOLDER"], im_mod_filename)
 
         return render_template("image.html", input=input, output=output)
     else:
