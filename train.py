@@ -16,7 +16,8 @@ import module
 # =                                   param                                    =
 # ==============================================================================
 
-default_att_names = ['Men', 'Women', 'Boots', 'Sandals', 'Shoes', 'Slippers']
+# default_att_names = ['Men', 'Women', 'Boots', 'Sandals', 'Shoes', 'Slippers']
+default_att_names = ['Men', 'Women', 'Unisex']
 py.arg('--att_names', choices=data.ATT_ID.keys(), nargs='+', default=default_att_names)
 
 py.arg('--img_dir', default='./data/zappos_50k/images')

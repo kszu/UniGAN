@@ -3,6 +3,7 @@
 import six
 
 import tensorflow as tf
+import tensorflow
 
 from tensorflow.contrib.framework.python.ops import add_arg_scope
 from tensorflow.contrib.framework.python.ops import variables
