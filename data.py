@@ -4,7 +4,9 @@ import tensorflow as tf
 import tflib as tl
 
 
-ATT_ID = {'Men': 0, 'Women': 1, 'Unisex': 2}
+ATT_ID = {'Men': 0, 'Unisex': 1, 'Women': 2, 'Boat_shoes': 3, 'Clogs_mules': 4, 'Flats': 5, 'Heels': 6, 'Loafers': 7, 'Oxfords': 8, 'Athletics': 9}
+
+# ATT_ID = {'Men': 0, 'Women': 1, 'Unisex': 2}
 # ATT_ID = {'Men': 0, 'Women': 1, 'Boots': 2, 'Sandals': 3, 'Shoes': 4, 'Slippers': 5}
 
 # ATT_ID = {'5_o_Clock_Shadow': 0, 'Arched_Eyebrows': 1, 'Attractive': 2,
