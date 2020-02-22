@@ -1,0 +1,24 @@
+<html> 
+
+<head>
+<title>UniGAN</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+
+    <h1>Functioning image submission / transformation / return</h1>
+
+    <form action="/unigan" method="POST" enctype="multipart/form-data">
+        <input type="file" name="image" value="Upload">
+        <input type="submit" value="Transform image">
+        <p>Submission input:</p>
+          <img src= "{{ input }}?num={{ rand_num }}">
+        <p>Submission output:</p>
+          <img src= "{{ output }}?num={{ rand_num }}">
+    </form>
+
+</body>
+
+</html>

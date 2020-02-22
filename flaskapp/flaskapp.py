@@ -1,5 +1,8 @@
 from flask import Flask, jsonify, request, render_template, flash, redirect, url_for
 from flask_cors import CORS
+import subprocess
+from subprocess import Popen, PIPE
+from subprocess import check_output
 import pandas as pd
 import pickle
 import sklearn
@@ -23,6 +26,9 @@ app.config.from_object(__name__)
 
 UPLOAD_FOLDER = "static/uploads"
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+
+app.config["AttGAN_INPUT_FOLDER"] = "static/input_images/data"
+app.config["AttGAN_OUTPUT_FOLDER"] = "static/output/AttGAN_128/samples_testing_2"
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "txt"}
 
 # define user defined functions
@@ -63,6 +69,39 @@ def uploaded_file(filename):
     return send_from_directory(app.config["UPLOAD_FOLDER"], filename)
 
 
+@app.route("/test1", methods=["GET", "POST"])
+def test1():
+
+    """
+    test calling python script from command line
+    """
+
+    if request.method == "GET":
+        # py_file = os.path.join(app.root_path, "tmp1.py")
+        py_file = os.path.join(app.root_path, "test.py")
+
+        # python_command = "python '{0}'".format(py_file)
+        python_command = "CUDA_VISIBLE_DEVICES=0 python {0} --experiment_name AttGAN_128 --flask_path {1}".format(py_file, app.root_path)
+        try:
+            stdout = check_output([python_command], shell=True)
+            return """<title>Success</title>
+                      <h1>Images generated!</h1>
+                      """
+        except subprocess.CalledProcessError as e:
+            return "An error occurred while trying to fetch task status updates."
+    else:
+        return """<title>500 Error</title>
+               <h1>Error!</h1>
+               <p>Only GET is supported right now</p>""", 500
+
+@app.route('/test2')
+def test2():
+    input = os.path.join(app.config["AttGAN_INPUT_FOLDER"], "004501.jpg")
+    output = os.path.join(app.config["AttGAN_OUTPUT_FOLDER"], "1.jpg")
+
+    if request.method == "GET":
+        return render_template("attgan_image.html", input=input, output=output)
+
 @app.route("/image", methods=["GET", "POST"])
 def image_transformation():
 
@@ -102,6 +141,49 @@ def image_transformation():
         return render_template("image.html", input=input, output=output)
     else:
         return render_template("image.html", input="", output="")
+
+@app.route("/attgan", methods=["GET", "POST"])
+def attgan():
+
+    """
+    user submits an image to a form
+    save image to local directory (AttGAN_INPUT_FOLDER)
+    run model
+    return images
+
+    """
+
+    if request.method == "POST":
+        file = request.files["image"]
+        transform_option = request.form.get("transform_option")
+        
+        if file and allowed_file(file.filename):
+            # save original to directory
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.root_path, app.config["AttGAN_INPUT_FOLDER"], filename))
+
+            im = io.imread(os.path.join(app.root_path, app.config["AttGAN_INPUT_FOLDER"], filename), plugin="matplotlib")
+            if Image.fromarray(im).height > 256:
+                resize_factor = Image.fromarray(im).height / 256
+            else:
+                resize_factor = 1
+                
+            size = int(np.floor(Image.fromarray(im).width / resize_factor)), int(np.floor(Image.fromarray(im).height / resize_factor))
+            im_mod = Image.fromarray(im).resize(size)
+            im_mod.save(os.path.join(app.root_path, app.config["AttGAN_INPUT_FOLDER"], "004501.jpg"))
+
+            py_file = os.path.join(app.root_path, "test.py")
+            python_command = "CUDA_VISIBLE_DEVICES=0 python {0} --experiment_name AttGAN_128 --flask_path {1}".format(py_file, app.root_path)
+            stdout = check_output([python_command], shell=True)
+
+            # define input image and output image prior to returning on webpage
+            
+            input = os.path.join(app.config["AttGAN_INPUT_FOLDER"], "004501.jpg")
+            output = os.path.join(app.config["AttGAN_OUTPUT_FOLDER"], "1.jpg")
+
+        return render_template("attgan.html", input=input, output=output, rand_num=np.random.randint(low=1, high=100000, size=1))
+    else:
+        return render_template("attgan.html", input="", output="", rand_num="")
 
 
 if __name__ == "__main__":
