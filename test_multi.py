@@ -17,7 +17,7 @@ import module
 
 py.arg('--img_dir', default='./data/zappos_50k/images')
 py.arg('--test_label_path', default='./data/zappos_50k/test_label.txt')
-py.arg('--test_att_names', choices=data.ATT_ID.keys(), nargs='+', default=['Men', 'Women'])
+py.arg('--test_att_names', choices=data.ATT_ID.keys(), nargs='+', default=['Unisex', 'Oxfords'])
 
 py.arg('--experiment_name', default='default')
 args_ = py.args()
