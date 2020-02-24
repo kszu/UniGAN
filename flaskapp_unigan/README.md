@@ -4,7 +4,18 @@ Image: Deep Learning AMI (Ubuntu 18.04) Version 26.0
 AWS Machine Type: g4dn.xlarge
 ```
 
-Sample ssh command (update .pem filename & machine name):
+### EC2 Instance Security Setup (Inbound)
+|Type|Protocol|Port Range|Source|
+|:--:|:------:|:--------:|:----:|
+|HTTP|TCP|80|0.0.0.0/0|
+|HTTP|TCP|80|::/0|
+|SSH|TCP|22|0.0.0.0/0|
+|Custom TCP Rule|TCP|5000|0.0.0.0/0|
+|Custom TCP Rule|TCP|5000|::/0|
+|HTTPS|TCP|443|0.0.0.0/0|
+|HTTPS|TCP|443|::/0|
+
+### Sample ssh command (update .pem filename & machine name):
 ```
 ssh -i "t2-micro-1.pem" ubuntu@ec2-18-219-63-250.us-east-2.compute.amazonaws.com
 ```
