@@ -22,9 +22,9 @@ ssh -i "t2-micro-1.pem" ubuntu@ec2-18-219-63-250.us-east-2.compute.amazonaws.com
 
 ### install base packages
 ```
-sudo dpkg-reconfigure tzdata # set timezone
+sudo dpkg-reconfigure tzdata # set timezone to Los Angeles
 sudo apt-get update
-apt install apache2 apache2-dev python3 python3-dev python3-pip 
+sudo apt install apache2 apache2-dev python3 python3-dev python3-pip 
 sudo apt-get install libapache2-mod-wsgi-py3
 sudo apt install virtualenv
 ```
@@ -36,14 +36,14 @@ echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.clou
 sudo apt-get install apt-transport-https ca-certificates gnupg
 curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
 sudo apt-get update && sudo apt-get install google-cloud-sdk
-gcloud init # to login
+gcloud init # to login (set default zone to us-west-b)
 ```
 
 ### Installing cudnn 7.6.5 from tar file (default for machine image is 7.5.x which conflict with tensorflow 1.15).
 Instructions at https://docs.nvidia.com/deeplearning/sdk/cudnn-install/index.html#installlinux
 ```
 gsutil cp gs://w210-bucket-1/ubuntu-18.04-resources/cudnn-10.0-linux-x64-v7.6.5.32.tgz .
-tar -xzvf cudnn-10.2-linux-x64-v7.6.5.32.tgz
+tar xzvf cudnn-10.0-linux-x64-v7.6.5.32.tgz
 ```
 
 Copy the following files into the CUDA Toolkit directory, and change the file permissions.
@@ -72,13 +72,7 @@ In UniGAN/flaskapp_unigan...
 ```
 virtualenv --python=/usr/bin/python3 v-env3
 source v-env3/bin/activate
-pip install flask
-pip install flask_cors
-pip install tensorflow-gpu==1.15
-pip install opencv-python
-pip install scikit-image
-pip install tqdm
-pip install oyaml
+pip install flask flask_cors tensorflow-gpu==1.15 opencv-python scikit-image tqdm oyaml
 deactivate
 ```
 
@@ -86,15 +80,18 @@ In UniGAN/flaskapp_unigan...
 ```
 sudo cp 000-default.conf /etc/apache2/sites-enabled/000-default.conf
 sudo cp wsgi.conf /etc/apache2/mods-enabled/wsgi.conf
-sudo chmod -R 777 output
-cd static
+mkdir static; cd static
 ln -s ../data/zappos_50k/images input_images
 ln -s ../output output
+sudo chmod -R 777 output
 ```
 
-In UniGAN/flaskapp_unigan/output/UniGAN_128...
+In UniGAN/flaskapp_unigan/output/UniGAN_128 upload generator.pb...
 ```
-Upload generator.pb
+Example:
+cd ~/UniGAN/flaskapp_unigan/output/UniGAN_128
+gsutil cp gs://w210-bucket-1/UniGAN-models/generator_20200218.pb .
+mv generator_20200218.pb generator.pb
 ```
 
 Note: had to modify imlib/dtype.py to get inference working via Flask...
@@ -103,8 +100,9 @@ Note: had to modify imlib/dtype.py to get inference working via Flask...
 
 ### Test setup
 
-In UniGAN/flaskapp_unigan...
+In ~/UniGAN/flaskapp_unigan...
 ```
+gsutil cp gs://w210-bucket-1/UniGAN-models/generator_20200218.pb .
 CUDA_VISIBLE_DEVICES=0 python test.py --experiment_name UniGAN_128
 ```
 
