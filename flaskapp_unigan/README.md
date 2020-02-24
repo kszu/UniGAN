@@ -53,6 +53,11 @@ sudo cp cuda/lib64/libcudnn* /usr/local/cuda/lib64
 sudo chmod a+r /usr/local/cuda/include/cudnn.h /usr/local/cuda/lib64/libcudnn*
 ```
 
+### Clone repo
+```
+git clone https://github.com/kszu/UniGAN.git
+```
+
 ### Setup permissions for apache user
 ```
 sudo ln -sT /home/ubuntu/UniGAN/flaskapp_unigan /var/www/html/flaskapp_unigan
@@ -65,15 +70,9 @@ sudo chmod 777 /var/www/html
 sudo chmod 777 /var/www/html/flaskapp_unigan/static/input_images
 sudo chmod 777 /var/www/html/flaskapp_unigan/static/input_images/flaskapp_img.jpg
 sudo usermod -a -G varwwwusers ubuntu
-
 ```
 
-### Clone repo
-```
-git clone https://github.com/kszu/UniGAN.git
-```
-
-In UniGAN/flaskapp_unigan...
+### In UniGAN/flaskapp_unigan...
 ```
 virtualenv --python=/usr/bin/python3 v-env3
 source v-env3/bin/activate
@@ -81,7 +80,7 @@ pip install flask flask_cors tensorflow-gpu==1.15 opencv-python scikit-image tqd
 deactivate
 ```
 
-In UniGAN/flaskapp_unigan...
+### In UniGAN/flaskapp_unigan...
 ```
 sudo cp 000-default.conf /etc/apache2/sites-enabled/000-default.conf
 sudo cp wsgi.conf /etc/apache2/mods-enabled/wsgi.conf
@@ -91,7 +90,7 @@ ln -s ../output output
 sudo chmod -R 777 output
 ```
 
-In UniGAN/flaskapp_unigan/output/UniGAN_128 upload generator.pb...
+### In UniGAN/flaskapp_unigan/output/UniGAN_128 upload generator.pb...
 ```
 Example:
 cd ~/UniGAN/flaskapp_unigan/output/UniGAN_128
@@ -109,6 +108,7 @@ In ~/UniGAN/flaskapp_unigan...
 ```
 source v-env3/bin/activate
 CUDA_VISIBLE_DEVICES=0 python test.py --experiment_name UniGAN_128
+deactivate
 ```
 
 ### Running apache
