@@ -60,7 +60,12 @@ sudo groupadd varwwwusers
 sudo adduser www-data varwwwusers
 sudo chgrp -R varwwwusers /var/www/
 sudo chmod -R 760 /var/www/
+sudo chmod 777 /var/www/
+sudo chmod 777 /var/www/html
+sudo chmod 777 /var/www/html/flaskapp_unigan/static/input_images
+sudo chmod 777 /var/www/html/flaskapp_unigan/static/input_images/flaskapp_img.jpg
 sudo usermod -a -G varwwwusers ubuntu
+
 ```
 
 ### Clone repo
@@ -102,13 +107,13 @@ Note: had to modify imlib/dtype.py to get inference working via Flask...
 
 In ~/UniGAN/flaskapp_unigan...
 ```
-gsutil cp gs://w210-bucket-1/UniGAN-models/generator_20200218.pb .
+source v-env3/bin/activate
 CUDA_VISIBLE_DEVICES=0 python test.py --experiment_name UniGAN_128
 ```
 
 ### Running apache
 ```
-sudo apachectl start (restart)
+sudo apachectl restart
 tail /var/log/apache2/error.log
 ```
 
