@@ -22,7 +22,7 @@ ssh -i "t2-micro-1.pem" ubuntu@ec2-18-219-63-250.us-east-2.compute.amazonaws.com
 
 ### install base packages
 ```
-sudo dpkg-reconfigure tzdata # set timezone to Los Angeles
+sudo dpkg-reconfigure tzdata # set timezone to US->Pacific Ocean
 sudo apt-get update
 sudo apt install apache2 apache2-dev python3 python3-dev python3-pip 
 sudo apt-get install libapache2-mod-wsgi-py3
@@ -31,12 +31,12 @@ sudo apt install virtualenv
 
 ### install gsutil
 ```
-sudo apt-get install libwww-perl
-echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-sudo apt-get install apt-transport-https ca-certificates gnupg
-curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
-sudo apt-get update && sudo apt-get install google-cloud-sdk
-gcloud init # to login (set default zone to us-west-b)
+sudo apt-get install libwww-perl \
+echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list \
+sudo apt-get install apt-transport-https ca-certificates gnupg \
+curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - \
+sudo apt-get update && sudo apt-get install google-cloud-sdk \
+cloud init # to login (set default zone to us-west-b)
 ```
 
 ### Installing cudnn 7.6.5 from tar file (default for machine image is 7.5.x which conflict with tensorflow 1.15).
@@ -67,8 +67,6 @@ sudo chgrp -R varwwwusers /var/www/
 sudo chmod -R 760 /var/www/
 sudo chmod 777 /var/www/
 sudo chmod 777 /var/www/html
-sudo chmod 777 /var/www/html/flaskapp_unigan/static/input_images
-sudo chmod 777 /var/www/html/flaskapp_unigan/static/input_images/flaskapp_img.jpg
 sudo usermod -a -G varwwwusers ubuntu
 ```
 
@@ -87,6 +85,8 @@ sudo cp wsgi.conf /etc/apache2/mods-enabled/wsgi.conf
 mkdir static; cd static
 ln -s ../data/zappos_50k/images input_images
 ln -s ../output output
+sudo chmod 777 /var/www/html/flaskapp_unigan/static/input_images
+sudo chmod 777 /var/www/html/flaskapp_unigan/static/input_images/flaskapp_img.jpg
 sudo chmod -R 777 output
 ```
 
