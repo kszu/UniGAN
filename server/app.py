@@ -77,12 +77,17 @@ def image_transformation():
 
         if file and allowed_file(file.filename):
             # save original to directory
+            # im_orig = io.imread(file, plugin="matplotlib")
+            # im_orig = Image.fromarray(im_orig)
+            # im_orig = im_orig.resize((200,250))
+
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
 
             # read image and transform to grayscale
             im = io.imread(file, plugin="matplotlib")
             gray = Image.fromarray(im).convert("L")
+            # gray = gray.resize((200,250))
 
             # save grayscale
             gray_filename = "gray" + filename
@@ -95,6 +100,30 @@ def image_transformation():
         return render_template("image.html", input=input, output=output)
     else:
         return render_template("image.html", input="", output="")
+
+@app.route("/what_is_unigan", methods=["GET"])
+def load_what_is_unigan():
+    """
+    Load what is UniGAN page
+    """
+
+    return render_template("what_is_unigan.html")
+
+@app.route("/team", methods=["GET"])
+def load_team():
+    """
+    Load team page
+    """
+
+    return render_template("team.html")
+
+@app.route("/how_it_works", methods=["GET"])
+def load_how_it_works():
+    """
+    Load how it works page
+    """
+
+    return render_template("how_it_works.html")
 
 
 if __name__ == "__main__":

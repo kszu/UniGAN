@@ -1,22 +1,98 @@
 <html> 
+<div id="container">
+  <head>
+    <title>UniGAN</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+  </head>
 
-<head>
-<title>UniGAN</title>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
+  <div class="topnav">
+    <a class="active" href="/">Home</a>
+    <a href="/what_is_unigan">What is UniGAN?</a>
+    <a href="/how_it_works">How it works</a>
+    <a href="/team">Team</a>
+    <a href="/image">Try it!</a>
+  </div> 
 
-<body>
+  <div id="body">
+  <body>
+      <!-- <h1>Functioning form submission</h1>
 
-    <h1>Functioning form submission</h1>
+      <form action="/" method="POST">
+        <input type="text" name="submission">
+        <input type="submit" value="Predict"> 
+        <p>Model input: {{ input }}</p>
+        <p>Model output: {{ output }}</p>
+      </form> -->
+      <h1>UniGAN</h1>
+      <h3>Reducing gender bias in product design</h3>
+      <img class="displayed" src="/static/img/zappos_shoe.jpeg">
+      
+      <div style="padding: 20px;">
+        <div style="text-align: center;">
+          <a  href="/image" class="tryit_button">Try it!</a>
+        </div>
+      </div>
 
-    <form action="/" method="POST">
-      <input type="text" name="submission">
-      <input type="submit" value="Predict"> 
-      <p>Model input: {{ input }}</p>
-      <p>Model output: {{ output }}</p>
-    </form>
-    
-</body>
+      <div>
+        <h4>
+          Generate unisex products in seconds ⏲️
+        </h4>
+        <p>
+          Add something here about how to use UniGAN
+        </p>
+      </div>
+
+      <div>
+        <h4>
+          Why use UniGAN?
+        </h4>
+        <p>
+          - Corporate clothing waste totaled over 90 million tons in 2019 <br>
+          - Consumer tastes have changed: buyers don't want to be identified by gender <br>
+          - Product designers bring human biases into their designs
+        <h4>
+          UniGAN is the world's first gender-inclusive AI product
+        </h4>
+        <p>
+          Built for product designers and developers, UniGAN leverages cutting edge machine 
+          learning technology to combat gender bias at the origin of product development. 
+          Inclusivity is a win-win for consumers and corporations alike. 
+          Consumers express their gender as they see fit; companies reduce inventory and corporate waste.
+        </p>
+      </div>
+
+      <div>
+        <h4>
+          What users are saying 🗣️
+        </h4>
+        <p>
+          User quote #1 <br>
+          User quote #2 <br>
+          User quote #3
+        </p>
+      </div>
+
+  </body>
+  </div>
+
+  <footer>
+    <div id="footer">
+        <a href="/" class="a_footer">Home</a>
+        <br>
+        <a href="/what_is_unigan" class="a_footer">What is UniGAN?</a>
+        <br>
+        <a href="/how_it_works" class="a_footer">How it works</a>
+        <br>
+        <a href="/team" class="a_footer">Team</a>
+        <br>
+        <a href="/image" class="a_footer">Try it!</a>
+        <br>
+        <a href="https://github.com/kszu/unigan" class="a_footer">GitHub repository</a>
+    </div>
+</footer>
+
+</div>
 
 </html>
