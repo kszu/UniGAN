@@ -1,0 +1,73 @@
+<html> 
+<div id="container">
+    <head>
+        <title>UniGAN</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+    </head>
+
+    <div class="topnav">
+        <a href="/">Home</a>
+        <a href="/what_is_unigan">What is UniGAN?</a>        
+        <a href="/how_it_works">How it works</a>
+        <a class="active" href="/team">Team</a>
+        <a href="/unigan">Try it!</a>
+    </div> 
+     
+    <div id="body">
+    <body>
+        <h1>Team</h1>
+        <table style="width: 100%; padding: 50px">
+            <tr>
+              <th></th>
+              <th></th>
+            </tr>
+            <tr>
+              <td>
+                <img class="resize" src= "{{ url_for('static',filename='img/alex_headshot.jpg') }}">
+              </td>
+              <td>
+                Alex Mueller loves to work on hard problems. He's also a really serious runner, even at high altitudes.
+              </td>
+            </tr>
+            <tr>
+                <td>
+                  <img class="resize" src= "{{ url_for('static',filename='img/kevin_headshot.jpg') }}">
+                </td>
+                <td>
+                  Kevin Stone is an avid cyclist and hearty Oregonian. 
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img class="resize" src= "{{ url_for('static',filename='img/keenan_headshot.jpg') }}">
+                </td>
+                <td>
+                  Keenan is the third member of the group. Enough said.
+                </td>
+              </tr>
+    
+          </table>
+    </body>
+    </div>
+
+    <footer>
+        <div id="footer">
+            <a href="/" class="a_footer">Home</a>
+            <br>
+            <a href="/what_is_unigan" class="a_footer">What is UniGAN?</a>
+            <br>
+            <a href="/how_it_works" class="a_footer">How it works</a>
+            <br>
+            <a href="/team" class="a_footer">Team</a>
+            <br>
+            <a href="/unigan" class="a_footer">Try it!</a>
+            <br>
+            <a href="https://github.com/kszu/unigan" class="a_footer">GitHub repository</a>
+        </div>
+  </footer>
+
+</div> 
+
+</html>

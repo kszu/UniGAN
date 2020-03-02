@@ -44,21 +44,12 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 
 # define routes
 @app.route("/", methods=["GET", "POST"])
-def logreg_form():
-
+def load_home():
     """
-    run simple logistic regression model and return output of model
+    Load home page
     """
-
-    if request.method == "POST":
-        input = request.form.get("submission")
-
-        model_input = np.array(int(input))
-        result = logreg_model.predict(model_input.reshape(-1, 1))
-
-        return render_template("home.html", input=int(model_input), output=int(result))
-    else:
-        return render_template("home.html", input="", output="")
+    
+    return render_template("home.html", input="", output="")
 
 
 @app.route("/unigan", methods=["GET", "POST"])
@@ -116,6 +107,29 @@ def unigan():
 
         return render_template("unigan.html", input=input, output=output, rand_num=np.random.randint(low=1, high=100000, size=1))
 
+@app.route("/what_is_unigan", methods=["GET"])
+def load_what_is_unigan():
+    """
+    Load what is UniGAN page
+    """
+
+    return render_template("what_is_unigan.html")
+
+@app.route("/team", methods=["GET"])
+def load_team():
+    """
+    Load team page
+    """
+
+    return render_template("team.html")
+
+@app.route("/how_it_works", methods=["GET"])
+def load_how_it_works():
+    """
+    Load how it works page
+    """
+
+    return render_template("how_it_works.html")
 
 if __name__ == "__main__":
     app.run()

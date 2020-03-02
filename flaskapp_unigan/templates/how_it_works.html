@@ -1,0 +1,74 @@
+<html> 
+<div id="container">
+    <head>
+        <title>UniGAN</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+    </head>    
+
+    <div class="topnav">
+        <a href="/">Home</a>
+        <a href="/what_is_unigan">What is UniGAN?</a>        
+        <a class="active" href="/how_it_works">How it works</a>
+        <a href="/team">Team</a>
+        <a href="/unigan">Try it!</a>
+    </div> 
+
+    <div id="body">
+    <body>    
+        <h1>How it works</h1>
+        <div>
+            <h4>
+              Generate unisex products in seconds ⏲️
+            </h4>
+            <p>
+              Add something here about how to use UniGAN
+            </p>
+          </div>
+        <div>
+            <h4>
+                How does UniGAN work?
+            </h4>
+            <p>
+                UniGAN is built using what’s called a Generative Adversarial Network (GAN). 
+                GAN’s were first created in 2014 by Ian Goodfellow, and have seen a number of 
+                applications and developments in the subsequent years.<br> <br>
+                At their core, GAN’s allow synthetic data to be generated similarly to the 
+                data seen in the training set. For instance, in the case of UniGAN, 
+                by training our GAN on tens of thousands of shoe images, we’re able to 
+                generate novel unisex product designs within seconds.<br> <br>
+
+                Maybe include this diagram (or something like it) in there somewhere?
+            </p>
+
+            <div style="text-align: center;">
+                <img src="{{ url_for('static',filename='img/GAN_diagram.png') }}" height = 300 width = 900>
+            </div>
+            
+            <p>
+                To learn more about UniGAN, other GAN technologies, 
+                and our inspiration, please visit our <a href="https://github.com/kszu/unigan" target="_blank">GitHub repository</a>.
+            </p>
+        </div>    
+    </body>
+    </div>
+
+    <footer>
+        <div id="footer">
+            <a href="/" class="a_footer">Home</a>
+            <br>
+            <a href="/what_is_unigan" class="a_footer">What is UniGAN?</a>
+            <br>
+            <a href="/how_it_works" class="a_footer">How it works</a>
+            <br>
+            <a href="/team" class="a_footer">Team</a>
+            <br>
+            <a href="/unigan" class="a_footer">Try it!</a>
+            <br>
+            <a href="https://github.com/kszu/unigan" class="a_footer">GitHub repository</a>
+        </div>
+  </footer>
+  
+</div> 
+</html>
