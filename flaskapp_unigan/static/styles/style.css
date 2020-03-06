@@ -25,6 +25,11 @@ p {
     padding-bottom:100px;   /* Height of the footer */
  }
 
+#content {
+    min-height:100%;
+    position:relative;
+ }
+
  /* Styling footer */
  #footer {
     position:absolute;
@@ -57,7 +62,7 @@ img.displayed {
   }
 
 img.resize {
-    height: 200px;
+    height: 150px;
     width: 150px;
 }
 

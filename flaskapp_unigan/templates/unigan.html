@@ -3,7 +3,8 @@
   <head>
     <title>UniGAN</title>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
   </head>
 
@@ -15,37 +16,36 @@
     <a class="active" href="/unigan">Try it!</a>
   </div> 
 
-  <div id="body">
   <body>
+    <div id="body">
+      Select Image to Transform:
+      <div>
+        <a href="/unigan?img_url=http://unigan.io/static/input_images/sample_shoe1.jpg" class="bg-blue-300 p-2 inline-block">
+  	  <img src="http://unigan.io/static/input_images/sample_shoe1.jpg" />
+        </a>
+        <a href="/unigan?img_url=http://unigan.io/static/input_images/sample_shoe2.jpg" class="bg-blue-300 p-2 inline-block">
+  	  <img src="http://unigan.io/static/input_images/sample_shoe2.jpg" />
+        </a>
+        <a href="/unigan?img_url=http://unigan.io/static/input_images/sample_shoe3.jpg" class="bg-blue-300 p-2 inline-block">
+  	  <img src="http://unigan.io/static/input_images/sample_shoe3.jpg" />
+        </a>
+      </div>
+      <p>
+	-- OR --
+      </p>
+      
+      <form action="/unigan" method="POST" enctype="multipart/form-data">
+	<input type="file" name="image" value="Upload">
+	<input type="submit" value="Transform image">
+      </form>
+      <div class="mt-3 pt-3 border-t-4 border-blue-300">
 
-    <h1>Functioning image submission / transformation / return</h1>
-
-    <form action="/unigan" method="POST" enctype="multipart/form-data">
-        <input type="file" name="image" value="Upload">
-        <input type="submit" value="Transform image">
-        <p>Submission input:</p>
-          <img src= "{{ input }}?num={{ rand_num }}">
-        <p>Submission output:</p>
-          <img src= "{{ output }}?num={{ rand_num }}">
-    </form>
+	<p>Submission input:</p>
+	<img src= "{{ input }}?num={{ rand_num }}">
+	<p>Submission output:</p>
+	<img src= "{{ output }}?num={{ rand_num }}">
+      </div>
+    </div>
   </body>
-  </div>
 
-    <footer>
-        <div id="footer">
-            <a href="/" class="a_footer">Home</a>
-            <br>
-            <a href="/what_is_unigan" class="a_footer">What is UniGAN?</a>
-            <br>
-            <a href="/how_it_works" class="a_footer">How it works</a>
-            <br>
-            <a href="/team" class="a_footer">Team</a>
-            <br>
-            <a href="/unigan" class="a_footer">Try it!</a>
-            <br>
-            <a href="https://github.com/kszu/unigan" class="a_footer">GitHub repository</a>
-        </div>
-  </footer>
-  
-</div> 
 </html>
