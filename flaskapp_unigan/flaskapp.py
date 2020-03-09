@@ -9,7 +9,7 @@ import pickle
 import sklearn
 import numpy as np
 from PIL import Image
-import os
+import os, time
 from werkzeug.utils import secure_filename
 from skimage import io, transform
 from unigan.unigan import unigan_bp, hello_bp
@@ -188,11 +188,13 @@ def unigan():
         else:
             r = requests.get(img_url)
             with open(os.path.join(app.root_path, app.config["UniGAN_INPUT_FOLDER"], "flaskapp_img.jpg"), 'wb') as f:
-                f.write(r.content)            
+                f.write(r.content)
         
-        # python_command = "CUDA_VISIBLE_DEVICES=0 python /var/www/html/flaskapp_unigan/test.py --experiment_name UniGAN_128 --flask_path /var/www/html/flaskapp_unigan"
-        # stdout = check_output([python_command], shell=True)
-        sample()
+        python_command = "CUDA_VISIBLE_DEVICES=0 python /var/www/html/flaskapp_unigan/test.py --experiment_name UniGAN_128 --flask_path /var/www/html/flaskapp_unigan"
+        stdout = check_output([python_command], shell=True)
+        # time.sleep(2) # sleep to ensure image is written to file
+        # sample()
+        # time.sleep(2) # sleep to ensure image is written to file
 
         input = os.path.join(app.config["UniGAN_INPUT_FOLDER"], "flaskapp_img.jpg")
         output = os.path.join(app.config["UniGAN_OUTPUT_FOLDER"], "1.jpg")
