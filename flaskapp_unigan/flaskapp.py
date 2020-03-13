@@ -8,6 +8,7 @@ import pandas as pd
 import pickle
 import sklearn
 import numpy as np
+import datetime
 from PIL import Image
 import os, time
 from werkzeug.utils import secure_filename
@@ -190,14 +191,24 @@ def unigan():
             with open(os.path.join(app.root_path, app.config["UniGAN_INPUT_FOLDER"], "flaskapp_img.jpg"), 'wb') as f:
                 f.write(r.content)
         
-        python_command = "CUDA_VISIBLE_DEVICES=0 python /var/www/html/flaskapp_unigan/test.py --experiment_name UniGAN_128 --flask_path /var/www/html/flaskapp_unigan"
-        stdout = check_output([python_command], shell=True)
-        # time.sleep(2) # sleep to ensure image is written to file
-        # sample()
+        # python_command = "CUDA_VISIBLE_DEVICES=0 python /var/www/html/flaskapp_unigan/test.py --experiment_name UniGAN_128 --flask_path /var/www/html/flaskapp_unigan"
+        # stdout = check_output([python_command], shell=True)
+        sample()
+        sample()
         # time.sleep(2) # sleep to ensure image is written to file
 
-        input = os.path.join(app.config["UniGAN_INPUT_FOLDER"], "flaskapp_img.jpg")
-        output = os.path.join(app.config["UniGAN_OUTPUT_FOLDER"], "1.jpg")
+        date_time_str = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+        input_newname = "flaskapp_img-" + date_time_str + ".jpg"
+        output_newname = "1-" + date_time_str + ".jpg"
+        python_command = "cp {0} {1}".format(os.path.join(app.root_path, app.config["UniGAN_INPUT_FOLDER"], "flaskapp_img.jpg"),
+                                             os.path.join(app.root_path, app.config["UniGAN_INPUT_FOLDER"], input_newname))
+        stdout = check_output([python_command], shell=True)
+        python_command = "cp {0} {1}".format(os.path.join(app.root_path, app.config["UniGAN_OUTPUT_FOLDER"], "1.jpg"),
+                                             os.path.join(app.root_path, app.config["UniGAN_OUTPUT_FOLDER"], output_newname))
+        stdout = check_output([python_command], shell=True)
+
+        input = os.path.join(app.config["UniGAN_INPUT_FOLDER"], input_newname)
+        output = os.path.join(app.config["UniGAN_OUTPUT_FOLDER"], output_newname)
 
         return render_template("unigan.html", input=input, output=output, rand_num=np.random.randint(low=1, high=100000, size=1))
     else:
