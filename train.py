@@ -19,7 +19,7 @@ import module
 # default_att_names = ['Men', 'Women', 'Boots', 'Sandals', 'Shoes', 'Slippers']
 # default_att_names = ['Men', 'Women', 'Unisex']
 
-default_att_names = ['Men', 'Unisex', 'Women', 'Boat_shoes', 'Clogs_mules', 'Flats', 'Heels', 'Loafers', 'Oxfords', 'Athletics']
+default_att_names = ['Men', 'Unisex', 'Women', 'Ankles', 'Athletics', 'Boots', 'Flats', 'Heels']
 
 py.arg('--att_names', choices=data.ATT_ID.keys(), nargs='+', default=default_att_names)
 
