@@ -30,7 +30,7 @@ py.arg('--load_size', type=int, default=143)
 py.arg('--crop_size', type=int, default=128)
 
 py.arg('--n_epochs', type=int, default=60)
-py.arg('--epoch_start_decay', type=int, default=100)
+py.arg('--epoch_start_decay', type=int, default=30)
 py.arg('--batch_size', type=int, default=32)
 py.arg('--learning_rate', type=float, default=2e-4)
 py.arg('--beta_1', type=float, default=0.5)
