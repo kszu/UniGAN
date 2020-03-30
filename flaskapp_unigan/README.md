@@ -26,6 +26,12 @@ sudo dpkg-reconfigure tzdata # set timezone to US->Pacific Ocean
 sudo apt-get update
 sudo apt install apache2 apache2-dev python3 python3-dev python3-pip 
 sudo apt-get install libapache2-mod-wsgi-py3
+curl -sL https://deb.nodesource.com/setup_13.x | sudo -E bash -
+sudo apt-get install -y nodejs
+# npm install --save-dev webpack && npm install -D webpack-cli
+# npm install --save-dev babel-core babel-loader babel-preset-es2015 babel-preset-react
+# npm i react react-dom --save-dev
+sudo npm install -g webpack
 sudo apt install virtualenv
 ```
 
@@ -74,7 +80,7 @@ sudo usermod -a -G varwwwusers ubuntu
 ```
 virtualenv --python=/usr/bin/python3 v-env3
 source v-env3/bin/activate
-pip install flask flask_cors tensorflow-gpu==1.15 opencv-python scikit-image tqdm oyaml
+pip install flask flask_cors tensorflow-gpu==1.15 opencv-python scikit-image tqdm oyaml awscli boto3 shell
 deactivate
 ```
 

@@ -2,6 +2,7 @@ import boto3
 import os
 import random
 import string
+import constants
 
 def randomStringDigits(stringLength=6):
     """Generate a random string of letters and digits """
@@ -13,8 +14,8 @@ def upload_file_to_s3(input, bucket, bucket_folder, filename):
     Function to upload a file to an S3 bucket
     """
     session = boto3.Session(region_name='us-east-2',
-                            aws_access_key_id='AKIA2LZFGPYQFYUICFNH',
-                            aws_secret_access_key='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')
+                            aws_access_key_id=constants.aws_access_key_id,
+                            aws_secret_access_key=constants.aws_secret_access_key)
     s3 = session.client('s3')
     object = '%s/%s' % (bucket_folder, filename)
     response = s3.upload_file(input, bucket, object, ExtraArgs={'ContentType': "image/jpeg", 'ACL': "public-read"})
@@ -27,8 +28,8 @@ def delete_file_in_s3(bucket, object):
     Function to download a given file from an S3 bucket
     """
     session = boto3.Session(region_name='us-east-2',
-                            aws_access_key_id='AKIA2LZFGPYQFYUICFNH',
-                            aws_secret_access_key='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')
+                            aws_access_key_id=constants.aws_access_key_id,
+                            aws_secret_access_key=constants.aws_secret_access_key)
     s3 = session.client('s3')
     response = s3.delete_object(Bucket=bucket, Key=object)
 
@@ -60,8 +61,8 @@ def list_files_in_s3(bucket, bucket_folder):
 #                            aws_access_key_id=AWS_ACCESS_KEY_ID,
 #                            aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
     session = boto3.Session(region_name='us-east-2',
-                            aws_access_key_id='AKIA2LZFGPYQFYUICFNH',
-                            aws_secret_access_key='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')
+                            aws_access_key_id=constants.aws_access_key_id,
+                            aws_secret_access_key=constants.aws_secret_access_key)
     s3 = session.resource('s3')
     my_bucket = s3.Bucket(bucket)
     contents = []
