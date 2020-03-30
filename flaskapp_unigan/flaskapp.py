@@ -197,14 +197,49 @@ def unigan():
             resp = make_response(render_template("unigan.html", input=input, output=output, rand_num=np.random.randint(low=1, high=100000, size=1),
                                                  img_width=640, labels=labels, images=images, my_images=my_images, last_image=img_arg, model_type="gender"))
             return resp
-        elif unigan_method == "slide":
+        elif "slide" in unigan_method:
+
+            slide_option = unigan_method.split("-")[1]
+            if 'Men' in slide_option or 'Women' in slide_option:
+                test_script = 'test_slide.py'
+                if gender == "female":
+                    # gender_label = "flaskapp_img.jpg -1 1 -1"
+                    python_command = "cp {0} {1}".format(os.path.join(app.root_path, app.config["TEST_LABELS_FOLDER"], "female_img_test_label.txt"),
+                                                         os.path.join(app.root_path, app.config["TEST_LABELS_FOLDER"], "test_label.txt"))
+                else: # male
+                    # gender_label = "flaskapp_img.jpg 1 -1 -1"
+                    python_command = "cp {0} {1}".format(os.path.join(app.root_path, app.config["TEST_LABELS_FOLDER"], "male_img_test_label.txt"),
+                                                         os.path.join(app.root_path, app.config["TEST_LABELS_FOLDER"], "test_label.txt"))
+        
+                stdout = check_output([python_command], shell=True)
+            else:
+                test_script = 'test_slide_subcategories.py'
+                if shoe_type == "ankle":
+                    python_command = "cp {0} {1}".format(os.path.join(app.root_path, app.config["TEST_LABELS_FOLDER"], "ankle_test_label.txt"),
+                                                         os.path.join(app.root_path, app.config["TEST_LABELS_FOLDER"], "test_label_subcategories.txt"))
+                elif shoe_type == "athletic":
+                    python_command = "cp {0} {1}".format(os.path.join(app.root_path, app.config["TEST_LABELS_FOLDER"], "athletic_test_label.txt"),
+                                                         os.path.join(app.root_path, app.config["TEST_LABELS_FOLDER"], "test_label_subcategories.txt"))
+                elif shoe_type == "boot":
+                    python_command = "cp {0} {1}".format(os.path.join(app.root_path, app.config["TEST_LABELS_FOLDER"], "boot_test_label.txt"),
+                                                         os.path.join(app.root_path, app.config["TEST_LABELS_FOLDER"], "test_label_subcategories.txt"))
+                elif shoe_type == "flat":
+                    python_command = "cp {0} {1}".format(os.path.join(app.root_path, app.config["TEST_LABELS_FOLDER"], "flat_test_label.txt"),
+                                                         os.path.join(app.root_path, app.config["TEST_LABELS_FOLDER"], "test_label_subcategories.txt"))
+                elif shoe_type == "heel":
+                    python_command = "cp {0} {1}".format(os.path.join(app.root_path, app.config["TEST_LABELS_FOLDER"], "heel_test_label.txt"),
+                                                         os.path.join(app.root_path, app.config["TEST_LABELS_FOLDER"], "test_label_subcategories.txt"))
+
+                stdout = check_output([python_command], shell=True)
+
             labels = [""]
-            python_command = "CUDA_VISIBLE_DEVICES=0 python /var/www/html/flaskapp_unigan/test_slide.py --test_att_name Women --test_int_min -2 --test_int_max 2 --test_int_step 0.5 --experiment_name UniGAN_128 --flask_path /var/www/html/flaskapp_unigan"
+
+            python_command = "CUDA_VISIBLE_DEVICES=0 python /var/www/html/flaskapp_unigan/%s --test_att_name %s --test_int_min -2 --test_int_max 2 --test_int_step 0.5 --experiment_name UniGAN_128 --flask_path /var/www/html/flaskapp_unigan" % (test_script, slide_option)
             stdout = check_output([python_command], shell=True)
             input = os.path.join(app.config["INPUT_FOLDER"], "flaskapp_img.jpg")
-            output = os.path.join(app.config["OUTPUT_FOLDER_SLIDE"], "Women_-2_2_0.5/1.jpg")
+            output = os.path.join(app.config["OUTPUT_FOLDER_SLIDE"], "%s_-2_2_0.5/1.jpg" % slide_option)
             resp = make_response(render_template("unigan.html", input=input, output=output, rand_num=np.random.randint(low=1, high=100000, size=1),
-                                                 img_width=640, labels=labels, images=images, my_images=my_images, last_image=img_arg, model_type="slide"))
+                                                 img_width=640, labels=labels, images=images, my_images=my_images, last_image=img_arg, model_type=unigan_method))
             return resp
         elif unigan_method == "category":
             if shoe_type == "ankle":

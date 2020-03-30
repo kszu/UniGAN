@@ -7,7 +7,7 @@ import tensorflow as tf
 import tflib as tl
 import tqdm
 
-import data
+import data_subcategories as data
 import module
 
 
@@ -16,10 +16,10 @@ import module
 # ==============================================================================
 
 py.arg('--flask_path', default='/var/www/html/flaskapp_unigan')
-py.arg('--generator_pb', default='generator_unigan_gender_only_beta_0.5.pb')
+py.arg('--generator_pb', default='generator_unigan_subcategories_only.pb')
 py.arg('--img_dir', default='./data/zappos_50k/images')
-py.arg('--test_label_path', default='./data/zappos_50k/test_label.txt')
-py.arg('--test_att_name', choices=data.ATT_ID.keys(), default='Women')
+py.arg('--test_label_path', default='./data/zappos_50k/test_label_subcategories.txt')
+py.arg('--test_att_name', choices=data.ATT_ID.keys(), default='Heels')
 py.arg('--test_int_min', type=float, default=-2)
 py.arg('--test_int_max', type=float, default=2)
 py.arg('--test_int_step', type=float, default=0.5)
@@ -32,7 +32,7 @@ output_dir = os.path.join(args_.flask_path, py.join('output', args_.experiment_n
 # output_dir = py.join('output', args_.experiment_name)
 
 # save settings
-args = py.args_from_yaml(py.join(output_dir, 'settings.yml'))
+args = py.args_from_yaml(py.join(output_dir, 'settings_subcategories.yml'))
 args.__dict__.update(args_.__dict__)
 
 # others
