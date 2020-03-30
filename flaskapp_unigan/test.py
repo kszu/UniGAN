@@ -26,7 +26,6 @@ py.arg('--img_dir', default='./data/zappos_50k/images')
 py.arg('--test_label_path', default='./data/zappos_50k/test_label.txt')
 py.arg('--test_int', type=float, default=2)
 
-
 py.arg('--experiment_name', default='default')
 args_ = py.args()
 
@@ -66,7 +65,7 @@ def sample_graph():
     # =               graph                =
     # ======================================
 
-    if not os.path.exists(py.join(output_dir, 'generator.pb')):
+    if not os.path.exists(py.join(output_dir, 'generator_unigan_gender_only_beta_0.5.pb')):
         # model
         Genc, Gdec, _ = module.get_model(args.model, n_atts, weight_decay=args.weight_decay)
 
@@ -78,7 +77,7 @@ def sample_graph():
         x = Gdec(Genc(xa, training=False), b_, training=False)
     else:
         # load freezed model
-        with tf.gfile.GFile(py.join(output_dir, 'generator.pb'), 'rb') as f:
+        with tf.gfile.GFile(py.join(output_dir, 'generator_unigan_gender_only_beta_0.5.pb'), 'rb') as f:
             graph_def = tf.GraphDef()
             graph_def.ParseFromString(f.read())
             tf.import_graph_def(graph_def, name='generator')

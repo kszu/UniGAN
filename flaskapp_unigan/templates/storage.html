@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>S3 Storage Debug</title>
+  </head>
+  <body>
+    <div class="content">
+        <h3>Flask Drive: S3 Flask Demo</h3>
+        <p>Welcome to this AWS S3 Demo</p>
+	<p>Cookie value: {{ cookie_val }}</p>
+        <div>
+          <h3>Upload your file here:</h3>
+          <form method="POST" action="/upload" enctype=multipart/form-data>
+            <input type=file name=file>
+            <input type=submit value=Upload>
+          </form>
+        </div>
+        <div>
+          <h3>These are your uploaded files:</h3>
+          <p>Click on the filename to download it.</p>
+          <ul>
+            {% for image in contents %}
+            <li>
+              <img class="mt-2" src="https://w210-capstone-project.s3.us-east-2.amazonaws.com/{{ image }}" />	      
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+    </div>
+  </body>
+</html>

@@ -1,5 +1,6 @@
-from flask import Flask, jsonify, request, render_template, flash, redirect, url_for
+from flask import Flask, jsonify, request, render_template, flash, redirect, url_for, send_file, make_response
 from flask_cors import CORS
+from s3_utils import list_files_in_s3, download_file_from_s3, upload_file_to_s3, randomStringDigits, delete_file_in_s3
 import requests
 import subprocess
 from subprocess import Popen, PIPE
@@ -18,122 +19,6 @@ from unigan.unigan import unigan_bp, hello_bp
 import logging
 logging.basicConfig(filename='/var/www/html/flaskapp_unigan/debug1.log', level=logging.DEBUG, format='%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
 
-# imports for running test.py (UniGAN app)
-import imlib as im
-import pylib as py
-import tensorflow as tf
-import tflib as tl
-import tqdm
-import data
-import module
-
-# configuration
-DEBUG = True
-os.environ["CUDA_PATH"] = "/usr/local/cuda"
-
-py.arg('--flask_path', default='/var/www/html/flaskapp_unigan')
-py.arg('--img_dir', default='./data/zappos_50k/images')
-py.arg('--test_label_path', default='./data/zappos_50k/test_label.txt')
-py.arg('--test_int', type=float, default=2)
-py.arg('--experiment_name', default='UniGAN_128')
-args_ = py.args()
-
-# output_dir
-output_dir = os.path.join(args_.flask_path, py.join('output', args_.experiment_name))
-
-# save settings
-args = py.args_from_yaml(py.join(output_dir, 'settings.yml'))
-args.__dict__.update(args_.__dict__)
-
-# others
-n_atts = len(args.att_names)
-
-sess = tl.session()
-sess.__enter__()  # make default
-
-# ==============================================================================
-# =                               data and model                               =
-# ==============================================================================
-
-# data
-flask_img_dir = os.path.join(args.flask_path, args.img_dir)
-flask_test_label_path = os.path.join(args.flask_path, args.test_label_path)
-test_dataset, len_test_dataset = data.make_celeba_dataset(flask_img_dir, flask_test_label_path, args.att_names, args.n_samples,
-                                                          load_size=args.load_size, crop_size=args.crop_size,
-                                                          training=False, drop_remainder=False, shuffle=False, repeat=None)
-test_iter = test_dataset.make_one_shot_iterator()
-
-
-# ==============================================================================
-# =                                   graph                                    =
-# ==============================================================================
-
-def sample_graph():
-    # ======================================
-    # =               graph                =
-    # ======================================
-
-    if not os.path.exists(py.join(output_dir, 'generator.pb')):
-        # model
-        Genc, Gdec, _ = module.get_model(args.model, n_atts, weight_decay=args.weight_decay)
-
-        # placeholders & inputs
-        xa = tf.placeholder(tf.float32, shape=[None, args.crop_size, args.crop_size, 3])
-        b_ = tf.placeholder(tf.float32, shape=[None, n_atts])
-
-        # sample graph
-        x = Gdec(Genc(xa, training=False), b_, training=False)
-    else:
-        # load freezed model
-        with tf.gfile.GFile(py.join(output_dir, 'generator.pb'), 'rb') as f:
-            graph_def = tf.GraphDef()
-            graph_def.ParseFromString(f.read())
-            tf.import_graph_def(graph_def, name='generator')
-
-        # placeholders & inputs
-        xa = sess.graph.get_tensor_by_name('generator/xa:0')
-        b_ = sess.graph.get_tensor_by_name('generator/b_:0')
-
-        # sample graph
-        x = sess.graph.get_tensor_by_name('generator/xb:0')
-
-    # ======================================
-    # =            run function            =
-    # ======================================
-
-    save_dir = '%s/output/%s/samples_testing_%s' % (args.flask_path, args.experiment_name, '{:g}'.format(args.test_int))
-    py.mkdir(save_dir)
-
-    def run():
-        cnt = 0
-        for _ in tqdm.trange(len_test_dataset):
-            # data for sampling
-            xa_ipt, a_ipt = sess.run(test_iter.get_next())
-            b_ipt_list = [a_ipt]  # the first is for reconstruction
-            for i in range(n_atts):
-                tmp = np.array(a_ipt, copy=True)
-                tmp[:, i] = 1 - tmp[:, i]   # inverse attribute
-                tmp = data.check_attribute_conflict(tmp, args.att_names[i], args.att_names)
-                b_ipt_list.append(tmp)
-
-            x_opt_list = [xa_ipt]
-            for i, b_ipt in enumerate(b_ipt_list):
-                b__ipt = (b_ipt * 2 - 1).astype(np.float32)  # !!!
-                if i > 0:   # i == 0 is for reconstruction
-                    b__ipt[..., i - 1] = b__ipt[..., i - 1] * args.test_int
-                x_opt = sess.run(x, feed_dict={xa: xa_ipt, b_: b__ipt})
-                x_opt_list.append(x_opt)
-            sample = np.transpose(x_opt_list, (1, 2, 0, 3, 4))
-            sample = np.reshape(sample, (sample.shape[0], -1, sample.shape[2] * sample.shape[3], sample.shape[4]))
-
-            for s in sample:
-                cnt += 1
-                im.imwrite(s, '%s/%d.jpg' % (save_dir, cnt))
-
-    return run
-
-sample = sample_graph()
-
 # instatiate app
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -151,71 +36,23 @@ def allowed_file(filename):
 # enable CORS
 CORS(app, resources={r"/*": {"origins": "*"}})
 
+app.config["UPLOAD_FOLDER"] = "static/uploads"
+app.config["INPUT_FOLDER"] = "static/input_images"
+app.config["OUTPUT_FOLDER_SIMPLE"] = "static/output/UniGAN_128/samples_testing_2"
+app.config["OUTPUT_FOLDER_SLIDE"] = "static/output/UniGAN_128/samples_testing_slide" # e.g. Women_-2_2_0.5/1.jpg for subdir/output_file
+app.config["OUTPUT_FOLDER_SUBCATS"] = "static/output/UniGAN_128/samples_testing_subcategories_2"
+app.config["TEST_LABELS_FOLDER"] = "data/zappos_50k"
+ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "txt"}
+S3_BUCKET = "w210-capstone-project"
+
 # define routes
 @app.route("/", methods=["GET", "POST"])
 def load_home():
     """
     Load home page
     """
-    app.logger.info("n_atts:", n_atts)
     
     return render_template("home.html", input="", output="")
-
-app.config["UPLOAD_FOLDER"] = "static/uploads"
-app.config["UniGAN_INPUT_FOLDER"] = "static/input_images"
-app.config["UniGAN_OUTPUT_FOLDER"] = "static/output/UniGAN_128/samples_testing_2"
-ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "txt"}
-
-@app.route("/unigan", methods=["GET", "POST"])
-def unigan():
-
-    """
-    user submits an image to a form
-    save image to local directory (UniGAN_INPUT_FOLDER)
-    run model
-    return images
-
-    """
-    img_url = request.args.get('img_url')
-    if request.method == "POST" or (request.method == "GET" and img_url):
-        if request.method == "POST":
-            file = request.files["image"]
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.root_path, app.config["UniGAN_INPUT_FOLDER"], filename))
-            python_command = "cp {0} {1}".format(os.path.join(app.root_path, app.config["UniGAN_INPUT_FOLDER"], filename),
-                                                 os.path.join(app.root_path, app.config["UniGAN_INPUT_FOLDER"], "flaskapp_img.jpg"))
-            stdout = check_output([python_command], shell=True)
-            
-        else:
-            r = requests.get(img_url)
-            with open(os.path.join(app.root_path, app.config["UniGAN_INPUT_FOLDER"], "flaskapp_img.jpg"), 'wb') as f:
-                f.write(r.content)
-        
-        # python_command = "CUDA_VISIBLE_DEVICES=0 python /var/www/html/flaskapp_unigan/test.py --experiment_name UniGAN_128 --flask_path /var/www/html/flaskapp_unigan"
-        # stdout = check_output([python_command], shell=True)
-        sample()
-        sample()
-        # time.sleep(2) # sleep to ensure image is written to file
-
-        date_time_str = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
-        input_newname = "flaskapp_img-" + date_time_str + ".jpg"
-        output_newname = "1-" + date_time_str + ".jpg"
-        python_command = "cp {0} {1}".format(os.path.join(app.root_path, app.config["UniGAN_INPUT_FOLDER"], "flaskapp_img.jpg"),
-                                             os.path.join(app.root_path, app.config["UniGAN_INPUT_FOLDER"], input_newname))
-        stdout = check_output([python_command], shell=True)
-        python_command = "cp {0} {1}".format(os.path.join(app.root_path, app.config["UniGAN_OUTPUT_FOLDER"], "1.jpg"),
-                                             os.path.join(app.root_path, app.config["UniGAN_OUTPUT_FOLDER"], output_newname))
-        stdout = check_output([python_command], shell=True)
-
-        input = os.path.join(app.config["UniGAN_INPUT_FOLDER"], input_newname)
-        output = os.path.join(app.config["UniGAN_OUTPUT_FOLDER"], output_newname)
-
-        return render_template("unigan.html", input=input, output=output, rand_num=np.random.randint(low=1, high=100000, size=1))
-    else:
-        input = os.path.join(app.config["UniGAN_INPUT_FOLDER"], "flaskapp_img.jpg")
-        output = os.path.join(app.config["UniGAN_OUTPUT_FOLDER"], "1.jpg")
-
-        return render_template("unigan.html", input=input, output=output, rand_num=np.random.randint(low=1, high=100000, size=1))
 
 @app.route("/what_is_unigan", methods=["GET"])
 def load_what_is_unigan():
@@ -240,6 +77,181 @@ def load_how_it_works():
     """
 
     return render_template("how_it_works.html")
+
+@app.route("/storage")
+def storage():
+    cookie_S3dir = request.cookies.get('cookieS3dir')
+    contents = list_files_in_s3(S3_BUCKET, "UniGAN-my-images/" + cookie_S3dir)
+    resp = make_response(render_template('storage.html', contents=contents, cookie_val=cookie_S3dir))
+
+    return resp
+
+@app.route("/upload", methods=['POST'])
+def upload():
+    if request.method == "POST":
+        f = request.files['file']
+        cookie_val = request.cookies.get('somecookiename')
+
+        f.save(os.path.join(app.root_path, app.config["UPLOAD_FOLDER"], f.filename))
+        upload_file_to_s3(os.path.join(app.root_path, app.config["UPLOAD_FOLDER"], f.filename), S3_BUCKET, "UniGAN-my-images/"+cookie_val, f.filename)
+
+        return redirect("/storage")
+    
+@app.route("/delete_image", methods=['GET'])
+def delete_image():
+    cookie_S3dir = request.cookies.get('cookieS3dir')
+    img_arg = request.args.get('image')
+    if cookie_S3dir in img_arg:
+        delete_file_in_s3(S3_BUCKET, img_arg)
+
+    return redirect("/unigan")
+    
+@app.route("/unigan", methods=["GET", "POST"])
+def unigan():
+
+    """
+    user submits an image to a form
+    save image to local directory (INPUT_FOLDER)
+    run model
+    return images
+
+    """
+    img_arg = request.args.get('image_url')
+    # gender = request.args.get('gender')
+    unigan_method = request.args.get('method')
+    # shoe_type = request.args.get('shoe_type')
+    images = ["sample_shoe1.jpg", "sample_shoe2.jpg", "sample_shoe3.jpg", "sample_shoe4.jpg", "sample_shoe5.jpg", "sample_shoe6.jpg", "sample_shoe7.jpg"]
+    images_info = {"sample_shoe1.jpg": ["male", "ankle"], "sample_shoe2.jpg": ["male", "flat"],
+                   "sample_shoe3.jpg": ["female", "heel"], "sample_shoe4.jpg": ["female", "flat"], "sample_shoe5.jpg": ["female", "flat"],
+                   "sample_shoe6.jpg": ["male", "athletic"], "sample_shoe7.jpg": ["male", "athletic"]}
+
+    if request.method == "POST" or (request.method == "GET" and img_arg):
+        cookie_S3dir = request.cookies.get('cookieS3dir')
+        
+        if request.method == "POST":
+            gender = request.form.get('gender')
+            unigan_method = request.form.get('method')
+            shoe_type = request.form.get('shoe_type')
+            file = request.files["image"]
+            filename = secure_filename(file.filename)
+            filename_root = os.path.splitext(os.path.split(filename)[1])[0]
+            filename_ext = os.path.splitext(os.path.split(filename)[1])[1]
+            s3_filename = filename_root + "___" + gender + "___" + shoe_type + filename_ext
+            file.save(os.path.join(app.root_path, app.config["INPUT_FOLDER"], filename))
+            cookie_S3dir = request.cookies.get('cookieS3dir')
+            img_arg = "UniGAN-my-images/" + cookie_S3dir + "/" + s3_filename
+            upload_file_to_s3(os.path.join(app.root_path, app.config["INPUT_FOLDER"], filename), S3_BUCKET, "UniGAN-my-images/"+cookie_S3dir, s3_filename)
+
+            python_command = "cp {0} {1}".format(os.path.join(app.root_path, app.config["INPUT_FOLDER"], filename),
+                                                 os.path.join(app.root_path, app.config["INPUT_FOLDER"], "flaskapp_img.jpg"))
+            stdout = check_output([python_command], shell=True)
+            
+        else:
+            if "___" in img_arg:
+                img_url = "https://w210-capstone-project.s3.us-east-2.amazonaws.com/" + img_arg
+                filename = img_arg.split("/")[2]
+                filename_root = os.path.splitext(os.path.split(filename)[1])[0]
+                (filename_orig, gender, shoe_type) = filename_root.split("___")
+            else:
+                img_url = "http://unigan.io/static/input_images/" + img_arg
+                gender = images_info[img_arg][0]
+                shoe_type = images_info[img_arg][1]
+
+            app.logger.info(img_url, gender, shoe_type)
+            r = requests.get(img_url)
+            with open(os.path.join(app.root_path, app.config["INPUT_FOLDER"], "flaskapp_img.jpg"), 'wb') as f:
+                f.write(r.content)
+
+        # Ensure my_images contains latest uploaded file
+        my_images = list_files_in_s3(S3_BUCKET, "UniGAN-my-images/" + cookie_S3dir)
+
+        if unigan_method == "gender":
+            if gender == "female":
+                # gender_label = "flaskapp_img.jpg -1 1 -1"
+                python_command = "cp {0} {1}".format(os.path.join(app.root_path, app.config["TEST_LABELS_FOLDER"], "female_img_test_label.txt"),
+                                                     os.path.join(app.root_path, app.config["TEST_LABELS_FOLDER"], "test_label.txt"))
+            else: # male
+                # gender_label = "flaskapp_img.jpg 1 -1 -1"
+                python_command = "cp {0} {1}".format(os.path.join(app.root_path, app.config["TEST_LABELS_FOLDER"], "male_img_test_label.txt"),
+                                                     os.path.join(app.root_path, app.config["TEST_LABELS_FOLDER"], "test_label.txt"))
+        
+            stdout = check_output([python_command], shell=True)
+
+            labels = ["Original", "Reconstructed", "Male", "Unisex", "Female"]
+            python_command = "CUDA_VISIBLE_DEVICES=0 python /var/www/html/flaskapp_unigan/test.py --experiment_name UniGAN_128 --flask_path /var/www/html/flaskapp_unigan"
+            stdout = check_output([python_command], shell=True)
+    
+            date_time_str = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+            input_newname = "flaskapp_img-" + date_time_str + ".jpg"
+            output_newname = "1-" + date_time_str + ".jpg"
+            python_command = "cp {0} {1}".format(os.path.join(app.root_path, app.config["INPUT_FOLDER"], "flaskapp_img.jpg"),
+                                                 os.path.join(app.root_path, app.config["INPUT_FOLDER"], input_newname))
+            stdout = check_output([python_command], shell=True)
+            python_command = "cp {0} {1}".format(os.path.join(app.root_path, app.config["OUTPUT_FOLDER_SIMPLE"], "1.jpg"),
+                                                 os.path.join(app.root_path, app.config["OUTPUT_FOLDER_SIMPLE"], output_newname))
+            stdout = check_output([python_command], shell=True)
+    
+            input = os.path.join(app.config["INPUT_FOLDER"], input_newname)
+            output = os.path.join(app.config["OUTPUT_FOLDER_SIMPLE"], output_newname)
+    
+            resp = make_response(render_template("unigan.html", input=input, output=output, rand_num=np.random.randint(low=1, high=100000, size=1),
+                                                 img_width=640, labels=labels, images=images, my_images=my_images, last_image=img_arg, model_type="gender"))
+            return resp
+        elif unigan_method == "slide":
+            labels = [""]
+            python_command = "CUDA_VISIBLE_DEVICES=0 python /var/www/html/flaskapp_unigan/test_slide.py --test_att_name Women --test_int_min -2 --test_int_max 2 --test_int_step 0.5 --experiment_name UniGAN_128 --flask_path /var/www/html/flaskapp_unigan"
+            stdout = check_output([python_command], shell=True)
+            input = os.path.join(app.config["INPUT_FOLDER"], "flaskapp_img.jpg")
+            output = os.path.join(app.config["OUTPUT_FOLDER_SLIDE"], "Women_-2_2_0.5/1.jpg")
+            resp = make_response(render_template("unigan.html", input=input, output=output, rand_num=np.random.randint(low=1, high=100000, size=1),
+                                                 img_width=640, labels=labels, images=images, my_images=my_images, last_image=img_arg, model_type="slide"))
+            return resp
+        elif unigan_method == "category":
+            if shoe_type == "ankle":
+                python_command = "cp {0} {1}".format(os.path.join(app.root_path, app.config["TEST_LABELS_FOLDER"], "ankle_test_label.txt"),
+                                                     os.path.join(app.root_path, app.config["TEST_LABELS_FOLDER"], "test_label_subcategories.txt"))
+            elif shoe_type == "athletic":
+                python_command = "cp {0} {1}".format(os.path.join(app.root_path, app.config["TEST_LABELS_FOLDER"], "athletic_test_label.txt"),
+                                                     os.path.join(app.root_path, app.config["TEST_LABELS_FOLDER"], "test_label_subcategories.txt"))
+            elif shoe_type == "boot":
+                python_command = "cp {0} {1}".format(os.path.join(app.root_path, app.config["TEST_LABELS_FOLDER"], "boot_test_label.txt"),
+                                                     os.path.join(app.root_path, app.config["TEST_LABELS_FOLDER"], "test_label_subcategories.txt"))
+            elif shoe_type == "flat":
+                python_command = "cp {0} {1}".format(os.path.join(app.root_path, app.config["TEST_LABELS_FOLDER"], "flat_test_label.txt"),
+                                                     os.path.join(app.root_path, app.config["TEST_LABELS_FOLDER"], "test_label_subcategories.txt"))
+            elif shoe_type == "heel":
+                python_command = "cp {0} {1}".format(os.path.join(app.root_path, app.config["TEST_LABELS_FOLDER"], "heel_test_label.txt"),
+                                                     os.path.join(app.root_path, app.config["TEST_LABELS_FOLDER"], "test_label_subcategories.txt"))
+
+            stdout = check_output([python_command], shell=True)
+
+            labels = ["Original", "Reconstructed", "Ankle", "Athletic", "Boot", "Flat", "Heel"]
+            python_command = "CUDA_VISIBLE_DEVICES=0 python /var/www/html/flaskapp_unigan/test_subcategories.py --experiment_name UniGAN_128 --flask_path /var/www/html/flaskapp_unigan"
+            stdout = check_output([python_command], shell=True)
+            input = os.path.join(app.config["INPUT_FOLDER"], "flaskapp_img.jpg")
+            output = os.path.join(app.config["OUTPUT_FOLDER_SUBCATS"], "1.jpg")
+
+            resp = make_response(render_template("unigan.html", input=input, output=output, rand_num=np.random.randint(low=1, high=100000, size=1), img_width=896,
+                                                 labels=labels, images=images, my_images=my_images, last_image=img_arg, model_type="category"))
+            return resp
+    else:
+        # set cookie for s3 directory
+        cookie_S3dir = request.cookies.get('cookieS3dir')
+
+        labels = ["Original", "Reconstructed", "Male", "Unisex", "Female"]
+        input = os.path.join(app.config["INPUT_FOLDER"], "default_input.jpg")
+        output = os.path.join(app.config["OUTPUT_FOLDER_SIMPLE"], "default_output.jpg")
+    
+        if cookie_S3dir is None:
+            resp = make_response(render_template("unigan.html", input=input, output=output, rand_num=np.random.randint(low=1, high=100000, size=1), img_width=640,
+                                                 labels=labels, images=images, my_images="", last_image="", model_type=""))
+            resp.set_cookie('cookieS3dir', randomStringDigits(8))
+        else:
+            my_images = list_files_in_s3(S3_BUCKET, "UniGAN-my-images/" + cookie_S3dir)
+            resp = make_response(render_template("unigan.html", input=input, output=output, rand_num=np.random.randint(low=1, high=100000, size=1), img_width=640,
+                                                 labels=labels, images=images, my_images=my_images, last_image="", model_type=""))
+
+        return resp
 
 if __name__ == "__main__":
     app.run()

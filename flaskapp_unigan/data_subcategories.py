@@ -3,8 +3,9 @@ import pylib as py
 import tensorflow as tf
 import tflib as tl
 
+ATT_ID = {'Ankles': 0, 'Athletics': 1, 'Boots': 2, 'Flats': 3, 'Heels': 4}
 # ATT_ID = {'Men': 0, 'Unisex': 1, 'Women': 2, 'Ankles': 3, 'Athletics': 4, 'Boots': 5, 'Flats': 6, 'Heels': 7}
-ATT_ID = {'Men': 0, 'Unisex': 1, 'Women': 2}
+# ATT_ID = {'Men': 0, 'Unisex': 1, 'Women': 2}
 ID_ATT = {v: k for k, v in ATT_ID.items()}
 
 def make_celeba_dataset(img_dir,

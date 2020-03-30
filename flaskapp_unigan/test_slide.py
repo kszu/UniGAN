@@ -15,6 +15,7 @@ import module
 # =                                   param                                    =
 # ==============================================================================
 
+py.arg('--flask_path', default='/var/www/html/flaskapp_unigan')
 py.arg('--img_dir', default='./data/zappos_50k/images')
 py.arg('--test_label_path', default='./data/zappos_50k/test_label.txt')
 py.arg('--test_att_name', choices=data.ATT_ID.keys(), default='Women')
@@ -26,7 +27,8 @@ py.arg('--experiment_name', default='default')
 args_ = py.args()
 
 # output_dir
-output_dir = py.join('output', args_.experiment_name)
+output_dir = os.path.join(args_.flask_path, py.join('output', args_.experiment_name))
+# output_dir = py.join('output', args_.experiment_name)
 
 # save settings
 args = py.args_from_yaml(py.join(output_dir, 'settings.yml'))
@@ -44,7 +46,9 @@ sess.__enter__()  # make default
 # ==============================================================================
 
 # data
-test_dataset, len_test_dataset = data.make_celeba_dataset(args.img_dir, args.test_label_path, args.att_names, args.n_samples,
+flask_img_dir = os.path.join(args.flask_path, args.img_dir)
+flask_test_label_path = os.path.join(args.flask_path, args.test_label_path)
+test_dataset, len_test_dataset = data.make_celeba_dataset(flask_img_dir, flask_test_label_path, args.att_names, args.n_samples,
                                                           load_size=args.load_size, crop_size=args.crop_size,
                                                           training=False, drop_remainder=False, shuffle=False, repeat=None)
 test_iter = test_dataset.make_one_shot_iterator()
@@ -59,7 +63,7 @@ def sample_graph():
     # =               graph                =
     # ======================================
 
-    if not os.path.exists(py.join(output_dir, 'generator.pb')):
+    if not os.path.exists(py.join(output_dir, 'generator_unigan_gender_only_beta_0.5.pb')):
         # model
         Genc, Gdec, _ = module.get_model(args.model, n_atts, weight_decay=args.weight_decay)
 
@@ -71,7 +75,7 @@ def sample_graph():
         x = Gdec(Genc(xa, training=False), b_, training=False)
     else:
         # load freezed model
-        with tf.gfile.GFile(py.join(output_dir, 'generator.pb'), 'rb') as f:
+        with tf.gfile.GFile(py.join(output_dir, 'generator_unigan_gender_only_beta_0.5.pb'), 'rb') as f:
             graph_def = tf.GraphDef()
             graph_def.ParseFromString(f.read())
             tf.import_graph_def(graph_def, name='generator')
@@ -87,8 +91,8 @@ def sample_graph():
     # =            run function            =
     # ======================================
 
-    save_dir = './output/%s/samples_testing_slide/%s_%s_%s_%s' % \
-        (args.experiment_name, args.test_att_name, '{:g}'.format(args.test_int_min), '{:g}'.format(args.test_int_max), '{:g}'.format(args.test_int_step))
+    save_dir = '%s/output/%s/samples_testing_slide/%s_%s_%s_%s' % \
+        (args.flask_path, args.experiment_name, args.test_att_name, '{:g}'.format(args.test_int_min), '{:g}'.format(args.test_int_max), '{:g}'.format(args.test_int_step))
     py.mkdir(save_dir)
 
     def run():
