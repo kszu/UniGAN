@@ -19,7 +19,9 @@ import module
 # default_att_names = ['Men', 'Women', 'Boots', 'Sandals', 'Shoes', 'Slippers']
 # default_att_names = ['Men', 'Women', 'Unisex']
 
-default_att_names = ['Men', 'Unisex', 'Women', 'Boat_shoes', 'Clogs_mules', 'Flats', 'Heels', 'Loafers', 'Oxfords', 'Athletics']
+# default_att_names = ['Men', 'Unisex', 'Women', 'Ankles', 'Athletics', 'Boots', 'Flats', 'Heels']
+
+default_att_names = ['Ankles', 'Athletics', 'Boots', 'Flats', 'Heels']
 
 py.arg('--att_names', choices=data.ATT_ID.keys(), nargs='+', default=default_att_names)
 
@@ -30,7 +32,7 @@ py.arg('--load_size', type=int, default=143)
 py.arg('--crop_size', type=int, default=128)
 
 py.arg('--n_epochs', type=int, default=60)
-py.arg('--epoch_start_decay', type=int, default=100)
+py.arg('--epoch_start_decay', type=int, default=30)
 py.arg('--batch_size', type=int, default=32)
 py.arg('--learning_rate', type=float, default=2e-4)
 py.arg('--beta_1', type=float, default=0.5)
