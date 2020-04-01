@@ -142,7 +142,9 @@ def unigan():
             filename_root = os.path.splitext(os.path.split(filename)[1])[0]
             filename_ext = os.path.splitext(os.path.split(filename)[1])[1]
             s3_filename = filename_root + "___" + gender + "___" + shoe_type + filename_ext
-            file.save(os.path.join(app.root_path, app.config["INPUT_FOLDER"], filename))
+            file_savepath = os.path.join(app.root_path, app.config["INPUT_FOLDER"], filename)
+            file.save(file_savepath)
+            make_bg_white(file_savepath, file_savepath)
             cookie_S3dir = request.cookies.get('cookieS3dir')
             img_arg = "UniGAN-my-images/" + cookie_S3dir + "/" + s3_filename
             upload_file_to_s3(os.path.join(app.root_path, app.config["INPUT_FOLDER"], filename), S3_BUCKET, "UniGAN-my-images/"+cookie_S3dir, s3_filename)
@@ -293,5 +295,21 @@ def unigan():
 
         return resp
 
+def make_bg_white(input_image, output_image):
+    img = Image.open(input_image).convert('RGB')
+    arr = np.array(np.asarray(img))
+    img.close()
+
+    R = [(0,240),(0,240),(0,240)]
+    red_range = np.logical_and(R[0][0] < arr[:,:,0], arr[:,:,0] < R[0][1])
+    green_range = np.logical_and(R[1][0] < arr[:,:,0], arr[:,:,0] < R[1][1])
+    blue_range = np.logical_and(R[2][0] < arr[:,:,0], arr[:,:,0] < R[2][1])
+    valid_range = np.logical_and(red_range, green_range, blue_range)
+
+    arr[np.logical_not(valid_range)] = 255
+
+    outim = Image.fromarray(arr)
+    outim.save(output_image)
+    
 if __name__ == "__main__":
     app.run()
