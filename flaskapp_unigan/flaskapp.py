@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, render_template, flash, redirect, url_for, send_file, make_response
+from flask import Flask, jsonify, request, render_template, flash, redirect, url_for, send_file, make_response, send_from_directory
 from flask_cors import CORS
 from s3_utils import list_files_in_s3, download_file_from_s3, upload_file_to_s3, randomStringDigits, delete_file_in_s3
 import requests
@@ -53,6 +53,11 @@ def load_home():
     """
     
     return render_template("home.html", input="", output="")
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'img/favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 @app.route("/what_is_unigan", methods=["GET"])
 def load_what_is_unigan():
@@ -232,14 +237,14 @@ def unigan():
 
                 stdout = check_output([python_command], shell=True)
 
-            labels = [""]
+            labels = ["Original", "Less", "", "", "", "← Intensity →", "", "", "", "More"]
 
             python_command = "CUDA_VISIBLE_DEVICES=0 python /var/www/html/flaskapp_unigan/%s --test_att_name %s --test_int_min -2 --test_int_max 2 --test_int_step 0.5 --experiment_name UniGAN_128 --flask_path /var/www/html/flaskapp_unigan" % (test_script, slide_option)
             stdout = check_output([python_command], shell=True)
             input = os.path.join(app.config["INPUT_FOLDER"], "flaskapp_img.jpg")
             output = os.path.join(app.config["OUTPUT_FOLDER_SLIDE"], "%s_-2_2_0.5/1.jpg" % slide_option)
             resp = make_response(render_template("unigan.html", input=input, output=output, rand_num=np.random.randint(low=1, high=100000, size=1),
-                                                 img_width=640, labels=labels, images=images, my_images=my_images, last_image=img_arg, model_type=unigan_method))
+                                                 img_width=1280, labels=labels, images=images, my_images=my_images, last_image=img_arg, model_type=unigan_method))
             return resp
         elif unigan_method == "category":
             if shoe_type == "ankle":
@@ -274,17 +279,17 @@ def unigan():
         cookie_S3dir = request.cookies.get('cookieS3dir')
 
         labels = ["Original", "Reconstructed", "Male", "Unisex", "Female"]
-        input = os.path.join(app.config["INPUT_FOLDER"], "default_input.jpg")
-        output = os.path.join(app.config["OUTPUT_FOLDER_SIMPLE"], "default_output.jpg")
+        input = os.path.join(app.config["INPUT_FOLDER"], "no_image.jpg")
+        output = os.path.join(app.config["INPUT_FOLDER"], "no_image.jpg")
     
         if cookie_S3dir is None:
             resp = make_response(render_template("unigan.html", input=input, output=output, rand_num=np.random.randint(low=1, high=100000, size=1), img_width=640,
-                                                 labels=labels, images=images, my_images="", last_image="", model_type=""))
+                                                 labels="", images=images, my_images="", last_image="", model_type=""))
             resp.set_cookie('cookieS3dir', randomStringDigits(8))
         else:
             my_images = list_files_in_s3(S3_BUCKET, "UniGAN-my-images/" + cookie_S3dir)
             resp = make_response(render_template("unigan.html", input=input, output=output, rand_num=np.random.randint(low=1, high=100000, size=1), img_width=640,
-                                                 labels=labels, images=images, my_images=my_images, last_image="", model_type=""))
+                                                 labels="", images=images, my_images=my_images, last_image="", model_type=""))
 
         return resp
 

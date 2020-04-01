@@ -1,10 +1,12 @@
 <html> 
 <div id="container">
   <head>
-    <title>UniGAN</title>
+    <title>UniGAN | Home</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+    <link rel="shortcut icon" href="http://unigan.io/static/img/favicon.ico" type="image/x-icon"/>
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
   </head>
 
   <div class="topnav">
@@ -17,15 +19,7 @@
 
   <div id="body">
   <body>
-      <!-- <h1>Functioning form submission</h1>
-
-      <form action="/" method="POST">
-        <input type="text" name="submission">
-        <input type="submit" value="Predict"> 
-        <p>Model input: {{ input }}</p>
-        <p>Model output: {{ output }}</p>
-      </form> -->
-      <h1>UniGAN</h1>
+      <h1 class="text-4xl mb-2">UniGAN</h1>
       <h3>Reducing gender bias in product design</h3>
       <img style="width:200px;" src="/static/img/zappos_shoe.jpeg">
       
