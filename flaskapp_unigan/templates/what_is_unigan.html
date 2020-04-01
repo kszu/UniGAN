@@ -1,51 +1,67 @@
 <html> 
 <div id="container">
     <head>
-        <title>UniGAN | What is Unigan?</title>
-        <meta charset="utf-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <title>UniGAN</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="shortcut icon" href="http://unigan.io/static/img/favicon.ico" type="image/x-icon"/>
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/style.css') }}"/>
-        <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet"/>
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
     </head>
 
-    <div class="topnav">
-        <a href="/">Home</a>
-        <a class="active" href="/what_is_unigan">What is UniGAN?</a>
-        <a href="/how_it_works">How it works</a>
-        <a href="/team">Team</a>
-        <a href="/unigan">Try it!</a>
-      </div> 
-
-    <div id="body">
     <body>
-        <h1 class="text-4xl mb-2">What is UniGAN?</h1>
-        <p>
-            UniGAN was built in 2020 to solve two problems: <br /><br />
-            1) Consumers want traditionally-gendered products to reflect the gender fluid world that they now live in. <br>
-            2) Corporations produce millions of tons of clothing waste each year, driven by many SKU’s and product lines. <br /><br />
-            
-            "Cultural attitudes and gender ideologies frequently regard women as subordinate to men, or dictate that 
-            men should control women. These attitudes may be so widely and deeply held within the community that 
-            they are almost invisible - except in their effects. For they perpetuate discrimination, violence and humiliation."
-            - Navi Pillay, United Nations High Commissioner for Human Rights. <br /><br />
-        </p>
-        <h4>
-            Enter UniGAN, the world's first unisex design generating product.
-        </h4>
-        <p>
-            Built for product designers and developers, UniGAN leverages cutting edge machine learning technology 
-            to combat gender bias at the origin of product development. Inclusivity is a win-win for consumers and 
-            corporations alike. Consumers express their gender as they see fit; companies 
-            reduce inventory and corporate waste.
-        </p>
-        <p>
-            UniGAN is part of a larger effort to make consumer products inclusive and accessible first and foremost. 
-            By beginning with unisex design, product developers will help decrease toxic gender norms 
-            while also fighting corporate waste.
-        </p>
-    </body>
-    </div>
+        <div class="topnav">
+            <a class="inactive" href="/">Home</a>
+            <a class="active" href="/what_is_unigan">What is UniGAN?</a>
+            <a class="inactive" href="/how_it_works">How it works</a>
+            <a class="inactive" href="/team">Team</a>
+            <a class="inactive" href="/unigan">Try it!</a>
+            <img src="/static/img/unigan_logo.png" width="64" class="float-right mr-2 p-2"/>
+        </div> 
 
-</div>
+        <div id="cta" style="padding-top: 5rem; padding-bottom: 5rem;">
+            <h1 style="font-size: 72px; color: white;">What is UniGAN?</h1>
+            <h2 style="font-size: 28px; color: white;">Generate unisex product designs in seconds</h2>
+        </div>
+        <div class="container p-6 mx-auto">
+            <h2>
+                UniGAN was built in 2020 to solve two problems:
+            </h2>
+            <p>
+                1) Consumers want traditionally-gendered products to reflect the gender fluid world that they now live in. <br>
+                2) Corporations produce millions of tons of clothing waste each year, driven by many SKU’s and product lines.
+            </p>
+            <h2>
+                Enter UniGAN, the world's first unisex design generating product.
+            </h2>
+            <p>
+                Built for product designers and developers, UniGAN leverages cutting edge machine learning technology 
+                to combat gender bias at the origin of product development. Inclusivity is a win-win for consumers and 
+                corporations alike. Consumers express their gender as they see fit; companies 
+                reduce inventory and corporate waste.
+            </p>
+            <p>
+                UniGAN is part of a larger effort to make consumer products inclusive and accessible first and foremost. 
+                By beginning with unisex design, product developers will help decrease toxic gender norms 
+                while also fighting corporate waste.
+            </p>
+        </div>
+        <div style="background-color: #21468b;">
+	  <div class="flex flex-wrap justify-center p-16">
+            <div class="flex flex-col text-center items-center mx-16">
+                <p class="text-2xl text-white mb-2">1. Select shoe design</p>
+                <img class="resize" src="/static/img/zappos_shoe.jpeg"/>
+            </div>
+            <div class="flex flex-col text-center items-center mx-16">
+                <p class="text-2xl text-white mb-2">2. UniGAN-ify it</p>
+                <i class="fa fa-venus-mars" aria-hidden="true" style="color: white; font-size: 108px;"></i>
+            </div>
+            <div class="flex flex-col text-center items-center mx-16">
+                <p class="text-2xl text-white mb-2">3. Review your output</p>
+                <img class="resize" src="/static/img/zappos_shoe.jpeg"/>
+            </div>
+	  </div>
+	</div>
+    </body>
 </html>

@@ -15,7 +15,7 @@
       }
       
       .shoe.selected {
-      background-color: red;
+      background-color:#fd8738;
       }
 
       .shoe img {
@@ -40,18 +40,19 @@
     </style>
   </head>
 
-  <div class="topnav">
-    <a href="/">Home</a>
-    <a href="/what_is_unigan">What is UniGAN?</a>        
-    <a href="/how_it_works">How it works</a>
-    <a href="/team">Team</a>
-    <a class="active" href="/unigan">Try it!</a>
-  </div> 
-
   <body>
-    <div id="body">
+    <div class="topnav">
+      <a href="/">Home</a>
+      <a href="/what_is_unigan">What is UniGAN?</a>        
+      <a href="/how_it_works">How it works</a>
+      <a href="/team">Team</a>
+      <a class="active" href="/unigan">Try it!</a>
+      <img src="/static/img/unigan_logo.png" width="64" class="float-right mr-2 p-2"/>
+    </div> 
+
+    <div id="body" class="p-4 mt=2">
       <div id="actions">
-	<span class="py-2 px-4 bg-green-400" data-target="select">Sample Images</span>
+	<span class="py-2 px-4 bg-blue-400" data-target="select">Sample Images</span>
 	<span class="py-2 px-4 bg-gray-400" data-target="upload">File Upload</span>
       </div>
       <div id="forms">
@@ -111,7 +112,7 @@
             </div>
           </div>
   	</label>
-        <input class="mt-2" type="submit" value="Transform image">
+        <input class="mt-2" style="background-color:#fd8738" type="submit" value="Transform image">
         </form>
   
         <form id="select" method="GET" action="/unigan">
@@ -162,7 +163,7 @@
             {% endfor %}
   	  </ul>
   	<p></p>
-        <input class="mt-2" type="submit" value="Transform Image">
+        <input class="mt-2" style="background-color:#fd8738" type="submit" value="Transform image">
         </form>
       </div>
 

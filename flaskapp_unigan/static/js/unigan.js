@@ -8,13 +8,13 @@ $('.shoe').on('click', function() {
 
 $('#actions span').on('click', function() {
     button = $(this)
-    if (!button.hasClass('bg-green-400')) {
+    if (!button.hasClass('bg-blue-400')) {
 	$('form').hide()
 	$('#'+$(this).attr('data-target')).show()
 	$('#actions span').removeClass('bg-gray-400')
-	$('#actions span').removeClass('bg-green-400')
+	$('#actions span').removeClass('bg-blue-400')
 	$('#actions span').addClass('bg-gray-400')
-	button.addClass('bg-green-400')
+	button.addClass('bg-blue-400')
     }
 })
 

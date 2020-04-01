@@ -1,0 +1,57 @@
+<html> 
+<div id="container">
+    <head>
+        <title>UniGAN | Team</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="http://unigan.io/static/img/favicon.ico" type="image/x-icon"/>
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+        <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+    </head>
+
+    <div class="topnav">
+        <a href="/">Home</a>
+        <a href="/what_is_unigan">What is UniGAN?</a>        
+        <a href="/how_it_works">How it works</a>
+        <a class="active" href="/team">Team</a>
+        <a href="/unigan">Try it!</a>
+    </div> 
+     
+    <body>
+        <div id="body">
+            <h1 class="text-4xl">Meet the Team</h1>
+            <table style="width: 60%; padding: 50px">
+                <tr>
+                  <td style="padding: 50px;">
+                    <img src="{{ url_for('static',filename='img/alex_headshot.jpg') }}" class="resize" style="box-shadow: #3182ce 15px 15px;">
+                  </td>
+                  <td>
+                    <h1 class="text-3xl">Alex Mueller</h1><br />
+		    Alex loves to work on hard problems. He's also a really serious runner, even at high altitudes.
+                  </td>
+                </tr>
+                <tr>
+                    <td style="padding: 50px;">
+                      <img src="{{ url_for('static',filename='img/kevin_headshot.jpg') }}" class="resize" style="box-shadow: #3182ce 15px 15px;">
+                    </td>
+                    <td>
+                      <h1 class="text-3xl">Kevin Stone</h1><br />
+		      Kevin is an avid cyclist and hearty Oregonian. 
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 50px;">
+                      <img src="{{ url_for('static',filename='img/keenan_headshot.jpg') }}" class="resize" style="box-shadow: #3182ce 15px 15px;">
+                    </td>
+                    <td>
+		      <h1 class="text-3xl">Keenan Szulik</h1><br />
+                      Keenan is the third member of the group. Enough said.
+                    </td>
+                  </tr>
+        
+              </table>
+        </div>
+    </body>
+</div> 
+
+</html>
