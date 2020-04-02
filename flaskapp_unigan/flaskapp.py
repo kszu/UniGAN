@@ -12,6 +12,8 @@ import numpy as np
 import datetime
 from PIL import Image
 import os, time
+from urllib.parse import urlparse
+import urllib.request
 from werkzeug.utils import secure_filename
 from skimage import io, transform
 from unigan.unigan import unigan_bp, hello_bp
@@ -137,15 +139,28 @@ def unigan():
             gender = request.form.get('gender')
             unigan_method = request.form.get('method')
             shoe_type = request.form.get('shoe_type')
-            file = request.files["image"]
-            filename = secure_filename(file.filename)
-            filename_root = os.path.splitext(os.path.split(filename)[1])[0]
-            filename_ext = os.path.splitext(os.path.split(filename)[1])[1]
-            s3_filename = filename_root + "___" + gender + "___" + shoe_type + filename_ext
-            file_savepath = os.path.join(app.root_path, app.config["INPUT_FOLDER"], filename)
-            file.save(file_savepath)
+            remote_image_url = request.form.get('remote_image_url')
+            if remote_image_url == "":
+                file = request.files["image"]
+                filename = secure_filename(file.filename)
+                filename_root = os.path.splitext(os.path.split(filename)[1])[0]
+                filename_ext = os.path.splitext(os.path.split(filename)[1])[1]
+                file_savepath = os.path.join(app.root_path, app.config["INPUT_FOLDER"], filename)
+                file.save(file_savepath)
+            else:
+                a = urlparse(remote_image_url)
+                filename = os.path.basename(a.path)
+                filename_root = os.path.splitext(os.path.split(filename)[1])[0]
+                filename_ext = os.path.splitext(os.path.split(filename)[1])[1]
+                file_savepath = os.path.join(app.root_path, app.config["INPUT_FOLDER"], filename)
+                urllib.request.urlretrieve(remote_image_url, file_savepath)
+
+            # make image a square shape, clean up background
+            make_square(file_savepath, file_savepath)
             make_bg_white(file_savepath, file_savepath)
+
             cookie_S3dir = request.cookies.get('cookieS3dir')
+            s3_filename = filename_root + "___" + gender + "___" + shoe_type + filename_ext
             img_arg = "UniGAN-my-images/" + cookie_S3dir + "/" + s3_filename
             upload_file_to_s3(os.path.join(app.root_path, app.config["INPUT_FOLDER"], filename), S3_BUCKET, "UniGAN-my-images/"+cookie_S3dir, s3_filename)
 
@@ -310,6 +325,20 @@ def make_bg_white(input_image, output_image):
 
     outim = Image.fromarray(arr)
     outim.save(output_image)
+    
+def make_square(input_image, output_image):
+    img = Image.open(input_image).convert('RGB')
+    width, height = img.size 
+  
+    # Setting the points for cropped image 
+    left = 0
+    top = height - width
+    right = width
+    bottom = height
+  
+    # Cropped image of above dimension 
+    img = img.crop((left, top, right, bottom))
+    img.save(output_image)
     
 if __name__ == "__main__":
     app.run()

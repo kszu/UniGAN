@@ -6,6 +6,9 @@
         <link rel="shortcut icon" href="http://unigan.io/static/img/favicon.ico" type="image/x-icon"/>
         <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
         <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+	<script type="text/javascript" id="MathJax-script" async
+		src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+	</script>
     </head>    
 
     <body>
@@ -34,8 +37,7 @@
             </div>
 	    <p>
 	      UniGAN is based on AttGAN (<a class="no-underline hover:underline text-blue-500" href="https://github.com/LynnHo/AttGAN-Tensorflow" target="_blank">GitHub repository</a>, 
-	      <a class="no-underline hover:underline text-blue-500" href="https://arxiv.org/pdf/1711.10678v1.pdf" target="_blank">paper</a>). In the case of UniGAN, by training our GAN on tens of thousands of shoe images from the <a class="no-underline hover:underline text-blue-500" href="http://vision.cs.utexas.edu/projects/finegrained/utzap50k/" target="_blank">UT Zappos50K shoe dataset</a>, we’re able to 
-                generate novel shoe designs within seconds. The UniGAN architecture diagram is shown below. UniGAN consists of two basic subnetworks: The first one contains an encoder G<sub>enc</sub> (in blue) and a decoder G<sub>dec</sub> (in green). The second one contains an attribute classifier C and a discriminator D. We also have three loss terms.<br> <br>
+	      <a class="no-underline hover:underline text-blue-500" href="https://arxiv.org/pdf/1711.10678v1.pdf" target="_blank">paper</a>). In the case of UniGAN, by training our GAN on tens of thousands of shoe images from the <a class="no-underline hover:underline text-blue-500" href="http://vision.cs.utexas.edu/projects/finegrained/utzap50k/" target="_blank">UT Zappos50K shoe dataset</a>, we’re able to generate novel shoe designs within seconds. The UniGAN architecture diagram is shown below. UniGAN consists of two basic subnetworks: The first one contains an encoder \(G_{enc}\) (in blue) and a decoder \(G_{dec}\) (in green). The second one contains an attribute classifier C and a discriminator D. We also have three loss terms.<br> <br>
             </p>
             <div>
                 <img class="mx-auto my-4" src="{{ url_for('static',filename='img/unigan_architecture_diagram.png') }}">
@@ -45,13 +47,13 @@
 	    </p>
 	    <p class="text-2xl mt-4 mb-2 border-b-2">Attribute Editing</p>
 	    <p>
-	      Attribute editing can be formally defined as the learning of the encoder G<sub>enc</sub> and decoder G<sub>dec</sub>.
+	      Attribute editing can be formally defined as the learning of the encoder \(G_{enc}\) and decoder \(G_{dec}\).
 	    </p>
             <div>
                 <img class="mx-auto my-4" src="{{ url_for('static',filename='img/attribute_editing_process.png') }}">
             </div>
 	    <p>
-	    This is an unsupervised learning problem, since we do not have a ground truth. If you look at the formulas above, product image attribute editing is achieved by encoding a given product image x<sup>a</sup> with original binary attributes "a" into a latent representation "z". Then we decode the latent representation "z" into x<sup>b</sup> conditioned on the desired attributes "b". In the example shown at the bottom of the above architecture diagram, we are learning to translate women shoes x<sup>a</sup> to male shoes x<sup>b</sup>. The label array in the bottom right shows the new shoe attributes b. The red "1" indicates that it was being translated into a male shoe.
+	    This is an unsupervised learning problem, since we do not have a ground truth. If you look at the formulas above, product image attribute editing is achieved by encoding a given product image \(x^a\) with original binary attributes "a" into a latent representation "z". Then we decode the latent representation "z" into \(x^b\) conditioned on the desired attributes "b". In the example shown at the bottom of the above architecture diagram, we are learning to translate women shoes \(x^a\) to male shoes \(x^b\). The label array in the bottom right shows the new shoe attributes b. The red "1" indicates that it was being translated into a male shoe.
 	    </p>
 	    <p class="text-center text-4xl mt-4">How do we train the model?</p>
 	    <p class="mt-2">
@@ -60,7 +62,7 @@
 	    <p class="text-2xl mt-4">Attribute Classification Loss</p>
 	    <div class="flex items-center bg-gray-300">
 	    <p class="p-5">
-	      We employ an attribute classifier C to make sure that the output x<sup>b-hat</sup> is classified to own the desired attribute "b".  The cost function to binary cross-entropy loss. We achieve “0“ loss if the output image x<sup>b</sup> is classified to have the attribute "b". p<sub>data</sub> and p<sub>attr</sub> indicate the distribution of real images and the distribution of attributes, C<sub>i</sub>(x<sup>b</sup>) indicates the prediction of the i<sup>th</sup> attribute, and l<sub>g</sub>(x<sup>a</sup>; b) is the summation of binary cross entropy losses of all attributes.
+	      We employ an attribute classifier C to make sure that the output \(x^\hat{b}\) is classified to own the desired attribute "b".  The cost function to binary cross-entropy loss. We achieve “0“ loss if the output image \(x^b\) is classified to have the attribute "b". \(p_{data}\) and \(p_{attr}\) indicate the distribution of real images and the distribution of attributes, \(C_{i}(x^b)\) indicates the prediction of the \(i^t\) attribute, and \(l_{g}(x^a; b)\) is the summation of binary cross entropy losses of all attributes.
 	    </p>
             <div class="w-3/5 flex-shrink-0 pr-6">
                 <img class="mx-auto" src="{{ url_for('static',filename='img/attribute_classification_loss.png') }}">
@@ -70,7 +72,7 @@
 	    <p class="text-2xl mt-4">Reconstruction Loss</p>
 	    <div class="flex items-center bg-gray-300">
 	    <p class="p-5">
-	    Reconstruction learning aims for satisfactory preservation of attribute-excluding details. In other words, the output should still look "shoe-like". To this end, the decoder should learn to reconstruct the input image x<sup>a</sup>, by decoding the latent representation z back to the original attributes a. The cost function is L1 loss, which penalizes absolute deviations between x<sup>a</sup> and x<sup>a-hat</sup>.
+	    Reconstruction learning aims for satisfactory preservation of attribute-excluding details. In other words, the output should still look "shoe-like". To this end, the decoder should learn to reconstruct the input image \(x^a\), by decoding the latent representation z back to the original attributes a. The cost function is L1 loss, which penalizes absolute deviations between \(x^a\) and \(x^\hat{a}\).
 	    </p>
             <div class="w-3/5 flex-shrink-0 pr-6">
                 <img class="mx-auto" src="{{ url_for('static',filename='img/reconstruction_loss.png') }}">
