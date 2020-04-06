@@ -1,14 +1,78 @@
+* {
+    color:black;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
 body {
-    /* background-image: url('../img/unigan_background.jpg'); */
+    /* background-image: url('../img/unigan_background.png'); */
+    background-color: white;
     background-repeat: repeat-y;
-    background-size: cover;
-    margin: 0;
+    /* background-size: cover; */
+    margin: 0px;
     padding: 0;
     height: 100%;
+    width: 100%;
+}
+
+.blurbs {
+    margin-top: 1rem;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    background-color: white;
+}
+
+.blurb_box {
+    display: flex;
+    flex-direction: column;
+    width: 22rem;
+    text-align: center;
+    font-size: 1.125rem;
+    padding: 3rem 3rem;
+}
+
+.blurb_box_steps {
+    display: flex;
+    flex-direction: column;
+    width: 16rem;
+    color: white;
+    text-align: center;
+    font-size: 1.125rem;
+    padding: 3rem 3rem;
+}
+
+.details {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    background-color: #21468b;
+}
+
+.details_box {
+    display: flex;
+    flex-direction: column;
+    width: 66rem;
+    text-align: center;
+    font-size: 1.125rem;
+    padding: 3rem 3rem;
+    color: white;
 }
 
 p {
     padding-bottom: 5px;
+}
+
+p.box {
+    background-color: white;
+}
+
+#cta {
+    text-align: center;
+    background-color: #fd8738;
+    padding-bottom: 3rem;
+    padding-top: 1rem;
 }
 
 #container {
@@ -16,13 +80,12 @@ p {
     position:relative;
  }
 
- #header {
-    padding:10px;
- }
+ /* #header {
+    /* padding:10px; */ 
 
  #body {
-    padding:10px;
-    padding-bottom:100px;   /* Height of the footer */
+    /* padding:10px; */
+    padding-bottom: 0px;   /* Height of the footer */
  }
 
 #content {
@@ -30,10 +93,15 @@ p {
     position:relative;
  }
 
+ #copy {
+     padding-left: 5rem;
+     padding-right: 5rem;
+ }
+
  /* Styling footer */
  #footer {
     position:absolute;
-    padding-left: 10px;
+    /* padding-left: 10px; */
     padding-top: 5px;
     padding-bottom: 5px;
     bottom:0;
@@ -47,23 +115,30 @@ p {
     color: black;
 }
 
-* {
-    font-family: Arial, Helvetica, sans-serif;
-  }
-
 /* Some image stuff */
 img.displayed {
     display: block;
     margin-left: auto;
     margin-right: auto;
     border-radius: 20px;
-    height: 350px;
-    width: 300px;
+    height: 250px;
+    width: 350px;
   }
 
 img.resize {
     height: 150px;
-    width: 150px;
+    width: 200px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    margin-left: 5rem;
+}
+
+img.headshots {
+    height: 200px;
+    width: 200px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    margin-left: 5rem;
 }
 
 th, td {
@@ -75,32 +150,63 @@ h1 {
     text-align: center;
   }
 
+.h2_standout {
+    font-size: 28px;
+}
+
 h3 {
     text-align: center;
+}
+
+h4.box {
+    background-color: white;
 }
 
 /* Style universal Try it! button */
 .tryit_button {
     display: inline-block;
-    padding: 5px 15px;
-    background: #749eeb;
+    padding: 14px 32px;
+    background: #21468b;
     border: 0 none;
     cursor: pointer;
     -webkit-border-radius: 5px;
     border-radius: 5px;
     text-decoration: none;
-    color: black;
+    color: white;
+    font-size: 26px;
+    width: 72px;
+    /* font-weight: bold; */
 }
+
+.tryit_button_orange {
+    display: inline-block;
+    padding: 14px 32px;
+    background: #fd8738;
+    width: 72px;
+    text-align: center;
+    border: 0 none;
+    cursor: pointer;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: white;
+    font-size: 26px;
+    /* font-weight: bold; */
+}
+
 
 .tryit_button:visited {
-    color:black
+    color: white;
 }
 
 
-/* Style topp navigation bar */
+/* Style top navigation bar */
 .topnav {
-    background-color: #333;
+    background-color: #fd8738;
     overflow: hidden;
+    /* -webkit-border-radius: 5px;
+    border-radius: 5px; */
+    width: auto;
     }
       
 /* Style the links inside the navigation bar */
@@ -110,20 +216,29 @@ h3 {
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
-    font-size: 17px;
+    font-size: 22px;
+    font-weight: bold;
+    font-kerning: 2px;
     }
       
 /* Change the color of links on hover */
 .topnav a:hover {
-    background-color: #dddddd;
+    /* background-color: #749eeb; */
     color: white;
+    text-decoration: underline;
     }
       
 /* Add a color to the active/current link */
 .topnav a.active {
-    background-color: #b2b1b3;
+    /* background-color: #93afe4; */
     color: white;
+
     }
+
+.topnav a.inactive {
+    /* background-color: #749eeb; */
+    color: white;
+}
 
 input[type=submit] {
     padding:5px 15px; 

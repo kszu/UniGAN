@@ -5,40 +5,146 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     </head>
 
     <div class="topnav">
-        <a href="/">Home</a>
+        <a class="inactive" href="/">Home</a>
         <a class="active" href="/what_is_unigan">What is UniGAN?</a>
-        <a href="/how_it_works">How it works</a>
-        <a href="/team">Team</a>
-        <a href="/unigan">Try it!</a>
-      </div> 
+        <a class="inactive" href="/how_it_works">How it works</a>
+        <a class="inactive" href="/team">Team</a>
+        <a class="inactive" href="/unigan">Try it!</a>
+    </div> 
 
-    <div id="body">
+    <div id="body" style="background-color: white;">
     <body>
-        <h1>What is UniGAN?</h1>
-        <p>
-            UniGAN was built in 2020 to solve two problems: <br /><br />
-            1) Consumers want traditionally-gendered products to reflect the gender fluid world that they now live in. <br>
-            2) Corporations produce millions of tons of clothing waste each year, driven by many SKU’s and product lines.
-        </p>
-        <h4>
-            Enter UniGAN, the world's first unisex design generating product.
-        </h4>
-        <p>
-            Built for product designers and developers, UniGAN leverages cutting edge machine learning technology 
-            to combat gender bias at the origin of product development. Inclusivity is a win-win for consumers and 
-            corporations alike. Consumers express their gender as they see fit; companies 
-            reduce inventory and corporate waste.
-        </p>
-        <p>
-            UniGAN is part of a larger effort to make consumer products inclusive and accessible first and foremost. 
-            By beginning with unisex design, product developers will help decrease toxic gender norms 
-            while also fighting corporate waste.
-        </p>
+        <div id="cta" style="padding-top: 5rem; padding-bottom: 5rem;">
+            <h1 style="font-size: 72px; color: white;">What is UniGAN?</h1>
+            <h2 style="font-size: 28px; color: white;">Generate unisex product designs in seconds</h2>
+        </div>
+        <div class="blurbs">
+            <div class="blurb_box">
+                <h2 class="h2_standout">1. Select shoe design</h2>
+                <img class="resize" src="/static/img/flat_female_shoe.jpg">
+            </div>
+            <div class="blurb_box">
+                <h2 class="h2_standout">2. UniGAN-ify it</h2>
+                <i class="fa fa-venus-mars" aria-hidden="true" style="color: grey; font-size: 108px;"></i>
+            </div>
+            <div class="blurb_box">
+                <h2 class="h2_standout">3. Review your output</h2>
+                <img class="resize" src="/static/img/flat_unisex_shoe.jpg">
+            </div>
+        </div>
+        <div class="blurbs" style="background-color: #21468b;">
+            <div style="text-align: center;">
+                <h1 style="color: white;">
+                    Try three different UniGAN models to generate new shoe designs!
+                </h1>
+                <p style="color: white; padding-bottom: 1rem;">
+                    Use pre-selected sample images<span style="color: white;">&#8212;</span>or upload your own shoe designs via URL or file upload<span style="color: white;">&#8212;</span>to create new shoe designs with any of UniGAN's three design models.
+                </p>
+                <a href="/unigan" class="tryit_button_orange">Try it!</a>
+            </div>
+            <div class="blurb_box" style="padding-top: 0.5rem">
+                <h2 class="h2_standout" style="color: white;">
+                    Gender
+                </h2>
+                <p style="color: white;">
+                    Transform your original shoe design into male, female, and unisex designs, as well as 
+                    UniGAN's reconstruction of your design. 
+                </p>
+            </div>
+            <div class="blurb_box" style="padding-top: 0.5rem;">
+                <h2 class="h2_standout" style="color: white;">
+                    Attribute Intensity
+                </h2>
+                <p style="color: white;">
+                    Generate nine unique shoe designs of increasing intensity based on a given attribute that 
+                    you select (including gender and shoe style categories).
+                </p>
+            </div>
+            <div class="blurb_box" style="padding-top: 0.5rem;">
+                <h2 class="h2_standout" style="color: white;">
+                    Shoe Style Category
+                </h2>
+                <p style="color: white;">
+                    Recreate your footwear design in one of five shoe style categories:
+                    ankle, athletic, boots, flats, and heels.
+                </p>
+            </div>
+        </div>
+        <div id="copy" style="padding-top: 1rem; padding-bottom: 2rem;">
+            <h2 class="h2_standout" style="text-align: center;">
+                UniGAN was created to solve two problems:
+            </h2>
+            <p style="width: 95%;">
+                1) Consumers want to express their gender however they see fit, not to be shackled by traditional gender norms. <br>
+                2) Corporations produce millions of tons of clothing waste each year, driven by many SKU’s and product lines.
+            </p>
+            <h2 class="h2_standout" style="text-align: center;">
+                Enter UniGAN, the world's first unisex design generator
+            </h2>
+            <p style="width: 95%;">
+                Built specifically for footwear designers, UniGAN leverages machine learning technology 
+                to combat gender bias at the origin of product development. Inclusivity is a win-win for consumers and 
+                businesses alike. Consumers express their gender as they see fit; brands 
+                reduce inventory and corporate waste.
+            </p>
+            <p style="width: 95%;">
+                UniGAN hopes to contribute to a larger effort to make consumer products inclusive and accessible first and foremost. 
+                By beginning with unisex design, footwear designers will help decrease toxic gender norms 
+                while also fighting corporate waste.
+            </p>
+        </div>
     </body>
     </div>
 
 </div>
 </html>
+
+<!-- <div class="blurbs" style="background-color: #21468b;">
+    <div class="blurb_box">
+        <h2 style="color: white;">1. Select shoe design</h2>
+        <img class="resize" src="/static/img/flat_female_shoe.jpg">
+    </div>
+    <div class="blurb_box">
+        <h2 style="color: white;">2. UniGAN-ify it</h2>
+        <i class="fa fa-venus-mars" aria-hidden="true" style="color: white; font-size: 108px;"></i>
+    </div>
+    <div class="blurb_box">
+        <h2 style="color: white;">3. Review your output</h2>
+        <img class="resize" src="/static/img/flat_unisex_shoe.jpg">
+    </div>
+</div>
+<div id="copy">
+    <h2>
+        Try three different UniGAN models to generate new shoe designs!
+    </h2>
+    <p>
+        Whether you'd like to use pre-selected sample images, or upload your own shoe designs via URL or file upload,
+        you can create new shoe designs with any of UniGAN's three design models.
+    </p>
+    <h4>
+        Gender
+    </h4>
+    <p>
+        The Gender model transforms your original shoe design into male, female, and unisex designs, as well as 
+        UniGAN's reconstructed version of your design. 
+
+    </p>
+    <h4>
+        Attribute Intensity
+    </h4>
+    <p>
+        The Attribute Intensity model generates nine unique shoe designs of increasing intensity based on a given attribute that 
+        you select (attributes include gender and shoe style categories).
+    </p>
+    <h4>
+        Shoe Style Category
+    </h4>
+    <p>
+        The Shoe Style Category model recreates your original shoe design in one of five shoe style categories:
+        ankle, athletic, boots, flats, and heels.
+    </p>
+</div> -->
