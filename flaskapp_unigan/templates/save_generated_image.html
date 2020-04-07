@@ -1,0 +1,47 @@
+    <div class="modal hidden fixed inset-0 z-50 flex items-center">
+      <div class="w-1/3 bg-white rounded-md m-auto p-10 relative">
+	<span class="close absolute top-0 right-0 mt-2 mr-2 cursor-pointer"><i class="fa fa-times"></i></span>
+        <form id="save_image" action="/save_image" method="POST" class="w-full">
+        <input type="hidden" id="save_image_url" name="image_url">
+        <input class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" type="text" name="image_filename" value="" placeholder="Enter Filename of Image">
+	
+  	<label class="flex mt-2">
+	  <div class="w-1/3 text-right p-2">
+            Select gender:
+	  </div>
+          <div class="inline-block relative flex-grow">
+            <select name="gender" class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+              <option value="female">Female</option>
+              <option value="male">Male</option>
+              <option value="unisex">Unisex</option>
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+              <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+            </div>
+          </div>
+  	</label>
+  	<label class="flex mt-2">
+	  <div class="w-1/3 text-right p-2">
+            Select shoe type:
+	  </div>
+          <div class="inline-block relative flex-grow">
+            <select name="shoe_type" class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+              <option value="ankle">Ankle</option>
+              <option value="athletic">Athletic</option>
+              <option value="boot">Boot</option>
+              <option value="flat">Flat</option>
+              <option value="heel">Heel</option>
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+              <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+            </div>
+          </div>
+  	</label>
+	<div class="text-right">
+	  <span class="close cursor-pointer mr-2">Cancel</span>
+          <input class="mt-2 text-white" style="background-color:#fd8738" type="submit" value="Save Image">
+	</div>
+        </form>
+	
+      </div>
+    </div>

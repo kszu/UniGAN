@@ -1,0 +1,50 @@
+        <form id="select" method="GET" action="/unigan">
+  	
+        <p class="mt-2">
+            Sample Images
+  	</p>
+  	<input type="hidden" name="image_url" id="shoe_value" value="{{ last_image }}"/>
+        <ul>
+          {% for image in images %}
+          <li class="shoe bg-blue-300 p-1 inline-block {% if image == last_image %} selected {% endif %}>" data-value="{{ image }}">
+            <img src="http://unigan.io/static/input_images/{{ image }}" />
+          </li>
+          {% endfor %}
+        </ul>
+	{% if my_images %}
+	<ul>My Images</ul>
+	{% endif %}
+        <ul>
+          {% for image in my_images %}
+          <li class="shoe bg-blue-300 p-1 inline-block {% if image == last_image %} selected {% endif %}>" data-value="{{ image }}">
+            <img src="https://w210-capstone-project.s3.us-east-2.amazonaws.com/{{ image }}" />
+	    <a class="text-white p-1 bg-red-500 border rounded hover:bg-red-800" href="/delete_image?image={{ image }}">
+	      <i class="fa fa-trash" aria-hidden="true"></i>
+	    </a>
+          </li>
+          {% endfor %}
+  	</ul>
+	  <label class="block mt-2">
+  	  Select model:
+            <div class="inline-block relative w-48 ml-2">
+              <select name="method" class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+                 <option value="gender" {% if 'gender' in model_type %} selected {% endif %}>Gender</option>
+	         <optgroup label="Slide">
+                   <option value="slide-Women" {% if 'slide-Women' in model_type %} selected {% endif %}>Slide-Women</option>
+                   <option value="slide-Men" {% if 'slide-Men' in model_type %} selected {% endif %}>Slide-Men</option>
+		   <option value="slide-Ankles" {% if 'slide-Ankles' in model_type %} selected {% endif %}>Slide-Ankles</option>
+		   <option value="slide-Athletics" {% if 'slide-Athletics' in model_type %} selected {% endif %}>Slide-Athletics</option>
+		   <option value="slide-Boots" {% if 'slide-Boots' in model_type %} selected {% endif %}>Slide-Boots</option>
+		   <option value="slide-Flats" {% if 'slide-Flats' in model_type %} selected {% endif %}>Slide-Flats</option>
+                   <option value="slide-Heels" {% if 'slide-Heels' in model_type %} selected {% endif %}>Slide-Heels</option>
+	         </optgroup>
+                 <option value="category" {% if 'category' in model_type %} selected {% endif %}>Category</option>
+              </select>
+              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+              </div>
+            </div>
+  	</label>
+  	<p></p>
+        <input class="mt-2 text-white" style="background-color:#fd8738" type="submit" value="Transform Image">
+        </form>
