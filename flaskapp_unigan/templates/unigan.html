@@ -1,14 +1,6 @@
-<html> 
-<div id="container">
-  <head>
-    <title>UniGAN</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="http://unigan.io/static/img/favicon.ico" type="image/x-icon"/>
-    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/style.css') }}">
-    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+{% extends 'layout.html' %}
+
+{% block css %}
     <style>
       .shoe, .result {
       position: relative;
@@ -41,11 +33,10 @@
       background-color: rgba(0,0,0,0.5)
       }
     </style>
-  </head>
+{% endblock %}
 
-  <body>
-    {% include 'nav.html' %}
-    
+{% block content %}
+
     <div id="body" class="p-4 mt=2">
       <div id="actions">
 	<span class="py-2 px-4 bg-blue-400" data-target="select">Images</span>
@@ -313,6 +304,5 @@
     </div>
     
     <script src="{{ url_for('static', filename='js/unigan.js') }}"></script>
-  </body>
+{% endblock %}
 
-</html>

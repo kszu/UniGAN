@@ -1,18 +1,6 @@
-<html> 
-<div id="container">
-    <head>
-        <title>UniGAN</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="shortcut icon" href="http://unigan.io/static/img/favicon.ico" type="image/x-icon"/>
-        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
-    </head>
+{% extends 'layout.html' %}
 
-    <body>
-        {% include 'nav.html' %}
-      
+{% block content %}
         <div id="cta" style="padding-top: 5rem; padding-bottom: 5rem;">
             <h1 style="font-size: 72px; color: white;">What is UniGAN?</h1>
             <h2 style="font-size: 28px; color: white;">Generate unisex product designs in seconds</h2>
@@ -56,5 +44,4 @@
             </div>
 	  </div>
 	</div>
-    </body>
-</html>
+{% endblock %}

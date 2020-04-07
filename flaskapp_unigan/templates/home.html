@@ -1,19 +1,6 @@
-<html> 
-<div id="container">
-  <head>
-    <title>UniGAN</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="http://unigan.io/static/img/favicon.ico" type="image/x-icon"/>
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='font-awesome/css/font-awesome.min.css')}}">
-    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  </head>
+{% extends 'layout.html' %}
 
-  <body>
-      {% include 'nav.html' %}
-
+{% block content %}
       <div id="cta">
         <h1 style="color: white; font-size: 72px;" class="leading-none">UniGAN</h1>
         <h3 style="color: white; font-size: 18px;">Reducing gender bias in product design</h3>
@@ -47,5 +34,4 @@
           </p>
         </div>
       </div>
-  </body>
-</html>
+{% endblock %}
