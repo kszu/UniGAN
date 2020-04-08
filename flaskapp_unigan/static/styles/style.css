@@ -26,7 +26,7 @@ body {
 .blurb_box {
     display: flex;
     flex-direction: column;
-    width: 22rem;
+    /* width: 22rem; */
     text-align: center;
     font-size: 1.125rem;
     padding: 3rem 3rem;
@@ -150,6 +150,10 @@ h1 {
     text-align: center;
   }
 
+.h2_standout {
+    font-size: 28px;
+}
+
 h3 {
     text-align: center;
 }
@@ -178,8 +182,6 @@ h4.box {
     display: inline-block;
     padding: 14px 32px;
     background: #fd8738;
-    width: 72px;
-    text-align: center;
     border: 0 none;
     cursor: pointer;
     -webkit-border-radius: 5px;
@@ -187,14 +189,14 @@ h4.box {
     text-decoration: none;
     color: white;
     font-size: 26px;
+    /* text-align: center; */
+    /* width: 72px; */
     /* font-weight: bold; */
 }
-
 
 .tryit_button:visited {
     color: white;
 }
-
 
 /* Style top navigation bar */
 .topnav {
