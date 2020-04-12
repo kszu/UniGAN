@@ -52,6 +52,19 @@
       </div>
       </div>
       <div class="w-1/2 flex-shrink-0 p-4">
+	{% if my_images %}
+	<ul>Uploaded Images</ul>
+	{% endif %}
+        <ul>
+          {% for image in my_images %}
+          <li class="shoe bg-blue-300 p-1 inline-block {% if image == last_image %} selected {% endif %}>" data-value="{{ image }}">
+            <img src="https://w210-capstone-project.s3.us-east-2.amazonaws.com/{{ image }}" />
+	    <a class="text-white p-1 bg-red-500 border rounded hover:bg-red-800" href="/delete_image?image={{ image }}">
+	      <i class="fa fa-trash" aria-hidden="true"></i>
+	    </a>
+          </li>
+          {% endfor %}
+  	</ul>
         <p class="mt-2">
             Generated Images
   	</p>

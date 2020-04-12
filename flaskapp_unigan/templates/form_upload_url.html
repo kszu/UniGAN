@@ -4,29 +4,6 @@
 	
   	<label class="flex mt-2">
 	  <div class="w-1/3 text-right p-2">
-  	    Select model:
-	  </div>
-          <div class="inline-block relative flex-grow">
-            <select name="method" class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
-              <option value="gender" {% if 'gender' in model_type %} selected {% endif %}>Gender</option>
-	      <optgroup label="Slide">
-                <option value="slide-Women" {% if 'slide-Women' in model_type %} selected {% endif %}>Slide-Women</option>
-		<option value="slide-Men" {% if 'slide-Men' in model_type %} selected {% endif %}>Slide-Men</option>
-		<option value="slide-Ankles" {% if 'slide-Ankles' in model_type %} selected {% endif %}>Slide-Ankles</option>
-		<option value="slide-Athletics" {% if 'slide-Athletics' in model_type %} selected {% endif %}>Slide-Athletics</option>
-		<option value="slide-Boots" {% if 'slide-Boots' in model_type %} selected {% endif %}>Slide-Boots</option>
-		<option value="slide-Flats" {% if 'slide-Flats' in model_type %} selected {% endif %}>Slide-Flats</option>
-		<option value="slide-Heels" {% if 'slide-Heels' in model_type %} selected {% endif %}>Slide-Heels</option>
-	      </optgroup>
-              <option value="category" {% if 'category' in model_type %} selected {% endif %}>Category</option>
-            </select>
-            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-              <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-            </div>
-          </div>
-  	</label>
-  	<label class="flex mt-2">
-	  <div class="w-1/3 text-right p-2">
             Select gender:
 	  </div>
           <div class="inline-block relative flex-grow">
@@ -51,6 +28,29 @@
               <option value="boot">Boot</option>
               <option value="flat">Flat</option>
               <option value="heel">Heel</option>
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+              <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+            </div>
+          </div>
+  	</label>
+  	<label class="flex mt-2">
+	  <div class="w-1/3 text-right p-2">
+  	    Select model:
+	  </div>
+          <div class="inline-block relative flex-grow">
+            <select name="method" class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+              <option value="gender" {% if 'gender' in model_type %} selected {% endif %}>Gender</option>
+	      <optgroup label="+/- Attribute Intensity">
+                <option value="slide-Women" {% if 'slide-Women' in model_type %} selected {% endif %}>Women</option>
+		<option value="slide-Men" {% if 'slide-Men' in model_type %} selected {% endif %}>Men</option>
+		<option value="slide-Ankles" {% if 'slide-Ankles' in model_type %} selected {% endif %}>Ankles</option>
+		<option value="slide-Athletics" {% if 'slide-Athletics' in model_type %} selected {% endif %}>Athletics</option>
+		<option value="slide-Boots" {% if 'slide-Boots' in model_type %} selected {% endif %}>Boots</option>
+		<option value="slide-Flats" {% if 'slide-Flats' in model_type %} selected {% endif %}>Flats</option>
+		<option value="slide-Heels" {% if 'slide-Heels' in model_type %} selected {% endif %}>Heels</option>
+	      </optgroup>
+              <option value="category" {% if 'category' in model_type %} selected {% endif %}>Category</option>
             </select>
             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
               <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
