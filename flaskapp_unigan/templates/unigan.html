@@ -40,15 +40,13 @@
     <div id="body" class="p-4 mt=2">
       <div id="actions">
 	<span class="py-2 px-4 bg-blue-400" data-target="select">Images</span>
-	<span class="py-2 px-4 bg-gray-400" data-target="upload">File Upload</span>
-	<span class="py-2 px-4 bg-gray-400" data-target="upload_url">URL Upload</span>
+	<span class="py-2 px-4 bg-gray-400" data-target="upload">Upload</span>
       </div>
       <div class="flex">
       <div class="w-1/2 flex-shrink-0 md:border-r-2 border-blue-500 p-4">
       <div id="forms">
-	{% include 'form_upload_file.html' %}
-	{% include 'form_upload_url.html' %}
 	{% include 'form_select_image.html' %}
+	{% include 'form_upload.html' %}
       </div>
       </div>
       <div class="w-1/2 flex-shrink-0 p-4">

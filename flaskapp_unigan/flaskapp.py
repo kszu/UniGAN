@@ -141,9 +141,9 @@ def unigan():
     # gender = request.args.get('gender')
     unigan_method = request.args.get('method')
     # shoe_type = request.args.get('shoe_type')
-    images = ["sample_shoe1.jpg", "sample_shoe2.jpg", "sample_shoe3.jpg", "sample_shoe4.jpg", "sample_shoe5.jpg", "sample_shoe6.jpg", "sample_shoe7.jpg",
-              "1_category.png", "1_gender.png", "2_category.png", "2_gender.png", "3_category.png", "3_gender.png", "4_category.png", "4_gender.png",
-              "5_category.png", "5_gender.png", "6_category.png", "6_gender.png", "7_category.png", "7_gender.png", "8_category.png", "8_gender.png"
+    sample_images = ["sample_shoe3.jpg", "sample_shoe4.jpg", "sample_shoe5.jpg", "sample_shoe6.jpg", 
+                     "1_category.png", "2_category.png", "2_gender.png", "3_category.png", "3_gender.png", "4_gender.png",
+                     "5_category.png", "5_gender.png", "6_gender.png", "7_category.png", "7_gender.png", "8_category.png", "8_gender.png"
     ]
     images_info = {"sample_shoe1.jpg": ["male", "ankle"], "sample_shoe2.jpg": ["male", "flat"], "sample_shoe3.jpg": ["female", "heel"], "sample_shoe4.jpg": ["female", "flat"],
                    "sample_shoe5.jpg": ["female", "flat"],"sample_shoe6.jpg": ["male", "athletic"], "sample_shoe7.jpg": ["male", "athletic"],
@@ -216,7 +216,12 @@ def unigan():
             elif "__gen-image__" in image:
                 gen_images.append(image)
 
-        if unigan_method == "gender":
+        if unigan_method is None: # Just uploaded an image
+            output = os.path.join(app.config["INPUT_FOLDER"], "no_image.jpg")
+            resp = make_response(render_template("unigan.html", output=output, nav_active="unigan", rand_num=np.random.randint(low=1, high=100000, size=1), img_width=640,
+                                                 labels="", images=sample_images, my_images=my_images, gen_images=gen_images, last_image="", model_type=""))
+            return resp  
+        elif unigan_method == "gender":
             if gender == "female":
                 # gender_label = "flaskapp_img.jpg -1 -1 1"
                 python_command = "cp {0} {1}".format(os.path.join(app.root_path, app.config["TEST_LABELS_FOLDER"], "female_img_test_label.txt"),
@@ -250,7 +255,7 @@ def unigan():
     
             resp = make_response(render_template("unigan.html", nav_active="unigan", output_list=output_split_list,
                                                  rand_num=np.random.randint(low=1, high=100000, size=1),
-                                                 img_width=640, labels=labels, images=images, my_images=my_images, gen_images=gen_images, last_image=img_arg, model_type="gender"))
+                                                 img_width=640, labels=labels, images=sample_images, my_images=my_images, gen_images=gen_images, last_image=img_arg, model_type="gender"))
             return resp
         elif "slide" in unigan_method:
 
@@ -309,7 +314,7 @@ def unigan():
             split_image(output, output_split_list_full, 10)
             
             resp = make_response(render_template("unigan.html", output_list=output_split_list, nav_active="unigan", rand_num=np.random.randint(low=1, high=100000, size=1),
-                                                 img_width=1280, labels=labels, images=images, my_images=my_images, gen_images=gen_images, last_image=img_arg, model_type=unigan_method))
+                                                 img_width=1280, labels=labels, images=sample_images, my_images=my_images, gen_images=gen_images, last_image=img_arg, model_type=unigan_method))
             return resp
         elif unigan_method == "category":
             if shoe_type == "ankle":
@@ -347,7 +352,7 @@ def unigan():
             split_image(output, output_split_list_full, 7)
             
             resp = make_response(render_template("unigan.html", output_list=output_split_list, nav_active="unigan", rand_num=np.random.randint(low=1, high=100000, size=1), img_width=896,
-                                                 labels=labels, images=images, my_images=my_images, gen_images=gen_images, last_image=img_arg, model_type="category"))
+                                                 labels=labels, images=sample_images, my_images=my_images, gen_images=gen_images, last_image=img_arg, model_type="category"))
             return resp
     else:
         # set cookie for s3 directory
@@ -358,7 +363,7 @@ def unigan():
     
         if cookie_S3dir is None:
             resp = make_response(render_template("unigan.html", output=output, nav_active="unigan", rand_num=np.random.randint(low=1, high=100000, size=1), img_width=640,
-                                                 labels="", images=images, my_images="", gen_images="", last_image="", model_type=""))
+                                                 labels="", images=sample_images, my_images="", gen_images="", last_image="", model_type=""))
             resp.set_cookie('cookieS3dir', randomStringDigits(8))
         else:
             all_images = list_files_in_s3(S3_BUCKET, "UniGAN-my-images/" + cookie_S3dir)
@@ -370,7 +375,7 @@ def unigan():
                 elif "___gen-image___" in image:
                     gen_images.append(image)
             resp = make_response(render_template("unigan.html", output=output, nav_active="unigan", rand_num=np.random.randint(low=1, high=100000, size=1), img_width=640,
-                                                 labels="", images=images, my_images=my_images, gen_images=gen_images, last_image="", model_type=""))
+                                                 labels="", images=sample_images, my_images=my_images, gen_images=gen_images, last_image="", model_type=""))
 
         return resp
 
