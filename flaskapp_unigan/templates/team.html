@@ -1,39 +1,39 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-      <div id="cta" style="padding-top: 5rem; padding-bottom: 5rem;">
-          <h1 style="font-size: 72px; color: white;">Meet the team</h1>
+<div id="cta" style="padding-top: 5rem; padding-bottom: 5rem;">
+  <h1 style="font-size: 72px; color: white;">Meet the team</h1>
+</div>
+
+<div class="">
+  <div class="flex flex-col items-center">
+    <div class="flex flex-row w-2/3 my-8 items-center">
+      <div class="mr-16 flex-shrink-0">
+        <img src="{{ url_for('static',filename='img/alex_headshot.jpg') }}" class="headshots" style="box-shadow: #21468b 15px 15px;">
       </div>
-      <div id="copy" class="flex justify-center">
-              <table style="width: 80%;">
-                <tr>
-                  <td style="padding: 50px;">
-                    <img src="{{ url_for('static',filename='img/alex_headshot.jpg') }}" class="headshots" style="box-shadow: #21468b 15px 15px;">
-                  </td>
-                  <td>
-                    <h1 class="text-3xl">Alex Mueller</h1><br />
-		    Alex loves to work on hard problems. He's also a really serious runner, even at high altitudes.
-                  </td>
-                </tr>
-                <tr>
-                    <td style="padding: 50px;">
-                      <img src="{{ url_for('static',filename='img/kevin_headshot.jpg') }}" class="headshots" style="box-shadow: #21468b 15px 15px;">
-                    </td>
-                    <td>
-                      <h1 class="text-3xl">Kevin Stone</h1><br />
-		      Kevin is an avid cyclist and hearty Oregonian. 
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style="padding: 50px;">
-                      <img src="{{ url_for('static',filename='img/keenan_headshot.jpg') }}" class="headshots" style="box-shadow: #21468b 15px 15px;">
-                    </td>
-                    <td>
-		      <h1 class="text-3xl">Keenan Szulik</h1><br />
-                      Keenan is the third member of the group. Enough said.
-                    </td>
-                  </tr>
-        
-          </table>
-        </div>
+      <div class="flex-grow">
+        <span class="text-3xl">Alex Mueller</span><br />
+        Alex loves to work on hard problems. He's also a really serious runner, even at high altitudes.
+      </div>
+    </div>
+    <div class="flex flex-row w-2/3 my-8 items-center">
+      <div class="mr-16 flex-shrink-0">
+        <img src="{{ url_for('static',filename='img/kevin_headshot.jpg') }}" class="headshots" style="box-shadow: #21468b 15px 15px;">
+      </div>
+      <div class="flex-grow">
+        <span class="text-3xl">Kevin Stone</span><br />
+        Kevin is an avid cyclist and hearty Oregonian.
+      </div>
+    </div>
+    <div class="flex flex-row w-2/3 my-8 items-center">
+      <div class="mr-16 flex-shrink-0">
+        <img src="{{ url_for('static',filename='img/keenan_headshot.jpg') }}" class="headshots" style="box-shadow: #21468b 15px 15px;">
+      </div>
+      <div class="flex-grow">
+        <span class="text-3xl">Keenan Szulik</span><br />
+        Keenan is the third member of the group. Enough said.
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
