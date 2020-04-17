@@ -18,9 +18,21 @@ $('#actions span').on('click', function() {
     }
 })
 
-// params = new URLSearchParams(window.location.search)
-// if (params.get('image_url')) {
-//     shoe = params.get('image_url')
-//     $('#shoe_value').val(shoe)
-//     $('.shoe[data-value="'+shoe+'"]').addClass('selected')
-// }
+var toggleModal = function() {
+    $('.modal').toggleClass('hidden')
+    $('#save_image_url').val('')
+}
+
+$('.result a').on('click', function() {
+    toggleModal()
+    image_url = $(this).parent('.result').attr('data-value')
+    $('#save_image_url').val(image_url) 
+})
+
+$('.modal .close').on('click', toggleModal)
+
+$('.modal').on('click', function(e) {
+    if($(e.target).hasClass('modal')) {
+	toggleModal()
+    }
+})
